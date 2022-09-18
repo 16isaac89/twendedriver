@@ -21,7 +21,8 @@ import {
     SEND_FAILED,
     CLEAR_STATE,
     SET_SOUND,
-    STOP_SOUND
+    STOP_SOUND,
+    MODAL_ON
  } from '../actions/types';
  import axios from 'axios'
  import {commonurl} from '../../utils/utilities'
@@ -32,8 +33,17 @@ import {
 import moment from 'moment-timezone'
 import { Audio } from 'expo-av';
 
- const LOCATION_TASK_NAME = 'background-location-task';
+import {
+   Pusher,
+   PusherMember,
+   PusherChannel,
+   PusherEvent,
+ } from '@pusher/pusher-websocket-react-native';
  
+ const pusher = Pusher.getInstance();
+ const LOCATION_TASK_NAME = 'background-location-task';
+
+
  const ROOT_URL = commonurl;
  CLEAR_STATE
 
@@ -64,10 +74,31 @@ import { Audio } from 'expo-av';
       await sound.playAsync();
       //dispatch({type:SET_SOUND,payload:sound})
         dispatch({type:SET_NOTIFICATION_ORDER,payload:{notifications,sound}});
-   //      setTimeout( async()=> {
-   //         await sound.stopAsync()
-   //          await sound.unloadAsync()
-   //   }, 5000);
+        let apiKey = "AB123QWE234RTY"
+        let cluster = "mti"
+        try {
+         await pusher.init({
+           apiKey,
+           cluster,
+           // authEndpoint: '<YOUR ENDPOINT URI>',
+           onConnectionStateChange,
+           onError,
+           onEvent,
+           onSubscriptionSucceeded,
+           onSubscriptionError,
+           onDecryptionFailure,
+           onMemberAdded,
+           onMemberRemoved,
+         });
+       
+         await pusher.subscribe({ channelName });
+         await pusher.connect();
+       } catch (e) {
+         console.log(`ERROR: ${e}`);
+       }
+
+
+
     }
  }
 
@@ -180,8 +211,21 @@ export const stopSound = async(sound)=> {
 
  export const setActiveOrder = (item) =>{
     return async(dispatch)=>{
-        await AsyncStorage.setItem('activeorder', JSON.stringify(item))
-        dispatch({type:SET_ACTIVE_ORDER,payload:item})
+      dispatch({type:MODAL_ON})
+      let id = item.id
+      axios.post(ROOT_URL+"/accept/order", {
+         id:id
+      })
+          .then( async(response)  => {
+            await AsyncStorage.setItem('activeorder', JSON.stringify(item))
+            dispatch({type:SET_ACTIVE_ORDER,payload:item})
+          })
+          .catch(function (error) {
+             dispatch({type:SEND_FAILED})
+              console.log(error.response)
+          })
+
+      
     }
  }
  export const checkActiveOrder = (item) =>{

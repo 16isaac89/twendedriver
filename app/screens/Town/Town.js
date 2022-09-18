@@ -7,6 +7,7 @@ import MapView, {ProviderPropType, Marker, AnimatedRegion}from 'react-native-map
 import { StyleSheet, Text, View, Dimensions,TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import OrderModal from '../../components/modals/OrderModal';
+import Modal from '../../components/modals/Modal';
 import { FontAwesome } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
@@ -21,6 +22,7 @@ class Town extends Component {
     return (
         <View style={styles.container}>
           <OrderModal navigation={ this.props.navigation }/>
+          <Modal />
         <MapView style={styles.map}
          initialRegion={{
           latitude: this.props.latitude,

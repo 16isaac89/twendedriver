@@ -20,7 +20,8 @@ import {
     SEND_FAILED,
     CLEAR_STATE,
     SET_SOUND,
-    STOP_SOUND
+    STOP_SOUND,
+    MODAL_ON
  } from '../actions/types';
  
  const INITIAL_STATE = {
@@ -41,6 +42,7 @@ import {
  earning:"0",
  completedstatus:"0",
  sound:'',
+ modal:false
  };
  
  export default function(state = INITIAL_STATE, action) {
@@ -56,7 +58,7 @@ import {
     case ORDER_LOADER:
       return{...state,loader:true}
     case SET_ACTIVE_ORDER:
-      return{...state,active:action.payload,order:'',orderstatus:action.payload.status}
+      return{...state,active:action.payload,order:'',orderstatus:action.payload.status,modal:false}
     case CHECK_ACTIVE_ORDER:
       return{...state,active:action.payload}
     case OTP_CHANGED:
@@ -89,6 +91,8 @@ import {
       return{...state,sound:action.payload}
     case STOP_SOUND:
       return{...state,sound:''}
+    case MODAL_ON:
+      return{...state,modal:true}
      default:
        return state;
    }

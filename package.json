@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
+    "@pusher/pusher-websocket-react-native": "^1.0.2",
     "@react-native-async-storage/async-storage": "~1.17.3",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-community/toolbar-android": "0.1.0-rc.2",
@@ -22,6 +23,7 @@
     "axios": "^0.27.2",
     "deprecated-react-native-prop-types": "^2.3.0",
     "expo": "~46.0.9",
+    "expo-av": "~12.0.4",
     "expo-barcode-scanner": "~11.4.0",
     "expo-camera": "~12.3.0",
     "expo-device": "~4.3.0",
@@ -33,6 +35,7 @@
     "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "~1.4.0",
     "expo-task-manager": "~10.3.0",
+    "laravel-echo": "^1.14.0",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.37",
     "react": "18.0.0",
@@ -58,8 +61,7 @@
     "react-native-web": "~0.18.7",
     "react-redux": "^8.0.2",
     "redux": "^4.2.0",
-    "redux-thunk": "^2.4.1",
-    "expo-av": "~12.0.4"
+    "redux-thunk": "^2.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

@@ -1,1 +1,1 @@
-export const commonurl = 'http://192.168.0.100/twende/api/v1';
+export const commonurl = 'http://192.168.0.101/twende/api/v1';
