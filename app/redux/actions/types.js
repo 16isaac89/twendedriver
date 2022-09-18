@@ -41,3 +41,5 @@ export const CLEAR_STATE = 'clear_state'
 export const SET_SOUND = 'set_sound'
 export const STOP_SOUND = 'stop_sound'
 export const MODAL_ON = 'modal_on'
+
+export const ORDER_ASSIGNED_CLOSE = 'order_assigned_close'

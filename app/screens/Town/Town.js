@@ -15,7 +15,7 @@ import * as actions from '../../redux/actions';
 class Town extends Component {
   
  componentDidMount(){
-  console.log(this.props.active)
+  this.props.listenorder()
  }
 
   render() {

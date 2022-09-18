@@ -22,7 +22,8 @@ import {
     CLEAR_STATE,
     SET_SOUND,
     STOP_SOUND,
-    MODAL_ON
+    MODAL_ON,
+    ORDER_ASSIGNED_CLOSE
  } from '../actions/types';
  import axios from 'axios'
  import {commonurl} from '../../utils/utilities'
@@ -32,15 +33,9 @@ import {
  import * as Location from 'expo-location';
 import moment from 'moment-timezone'
 import { Audio } from 'expo-av';
+import Pusher from 'pusher-js/react-native';
+import Echo from 'laravel-echo';
 
-import {
-   Pusher,
-   PusherMember,
-   PusherChannel,
-   PusherEvent,
- } from '@pusher/pusher-websocket-react-native';
- 
- const pusher = Pusher.getInstance();
  const LOCATION_TASK_NAME = 'background-location-task';
 
 
@@ -76,26 +71,7 @@ import {
         dispatch({type:SET_NOTIFICATION_ORDER,payload:{notifications,sound}});
         let apiKey = "AB123QWE234RTY"
         let cluster = "mti"
-        try {
-         await pusher.init({
-           apiKey,
-           cluster,
-           // authEndpoint: '<YOUR ENDPOINT URI>',
-           onConnectionStateChange,
-           onError,
-           onEvent,
-           onSubscriptionSucceeded,
-           onSubscriptionError,
-           onDecryptionFailure,
-           onMemberAdded,
-           onMemberRemoved,
-         });
-       
-         await pusher.subscribe({ channelName });
-         await pusher.connect();
-       } catch (e) {
-         console.log(`ERROR: ${e}`);
-       }
+      
 
 
 
@@ -412,6 +388,35 @@ export const stopSound = async(sound)=> {
                  console.log(error.response)
              })
     }
+ }
+
+
+ export const listenorder = () =>{
+return()=>{
+   window.Pusher = Pusher;
+   Pusher.logToConsole = true;
+
+   let PusherClient = new Pusher('87E46D36C9F3410D',{
+      cluster: "mt1",
+       wssHost: 'isaackaka.com',
+       wssPort: '6001',
+       wsPort: '6001',
+       enabledTransports: ["ws", "wss"],
+       // forceTLS: false,
+       enableStats: true,
+       forceTLS: false
+   });
+
+   let echo = new Echo({
+       broadcaster: 'pusher',
+       client: PusherClient,
+   });
+
+   echo.channel('order.'+'445').listen('OrderAssignment', (e) => {
+       console.log(e)
+       dispatch({type:ORDER_ASSIGNED_CLOSE})
+   });
+}
  }
 
  

@@ -1,20 +1,7 @@
 {
   "expo": {
-    "name": "example",
-    "plugins": [
-      [
-        "expo-notifications",
-        {
-          "icon": "./local/assets/icon.png",
-          "color": "#ffffff",
-          "sounds": [
-            "./local/assets/order.wav",
-            "./local/assets/order2.wav"
-          ]
-        }
-      ]
-    ],
-    "slug": "example",
+    "name": "twendedriver",
+    "slug": "twendedriver",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -37,27 +24,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      },
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyDSGXiLg9kRk_93B-s_2VFkrnqHfULeZtI"
-        }
-      },
-      "package": "com.twendedeliveries.driver",
-      "permissions": [
-        "CAMERA",
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_BACKGROUND_LOCATION"]
-      
-     
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "c59fe50b-c951-45da-9f02-6bc0fa21fd40"
-      }
     }
   }
 }
