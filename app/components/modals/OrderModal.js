@@ -13,14 +13,25 @@ class OrderModal extends Component {
      let sound = this.props.sound
      await sound.stopAsync()
     await sound.unloadAsync()
-    console.log(sound)
    // this.props.stopSound(sound)
   }
 
   setActiveOrder = async() =>{
+    this.stopSound()
     let order = this.props.order
-    await this.props.setActiveOrder(order)
-this.props.navigation.navigate('Accepted')
+    let accept = 1
+    let navigation = this.props.navigation
+    let driver = this.props.user.id
+    await this.props.setActiveOrder(order,accept,navigation,driver)
+    
+  }
+  denyOrder = async()=>{
+    this.stopSound()
+    let order = this.props.order
+    let accept = 0
+    let navigation = this.props.navigation
+    let driver = this.props.user.id
+    await this.props.setActiveOrder(order,accept,navigation,driver)
   }
   state = {
     modalVisible: false
@@ -45,7 +56,7 @@ this.props.navigation.navigate('Accepted')
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <TouchableOpacity onPress={()=>this.stopSound()} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <TouchableOpacity onPress={()=>this.denyOrder()} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
               <Icon name="cancel" color="red" size={25} />
             <Text style={styles.textStyle}>Decline</Text>
             </TouchableOpacity>
@@ -114,7 +125,8 @@ function mapStateToProps( state ) {
   return { 
     ordermodal:state.order.notmodal,
     order:state.order.order,
-    sound:state.order.sound
+    sound:state.order.sound,
+    user:state.auth.user
   };
 }
 

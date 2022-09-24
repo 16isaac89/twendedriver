@@ -1,79 +1,167 @@
-import { Camera, CameraType } from 'expo-camera';
-import { useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { Component } from 'react';
+import {
+  Alert,
+  Linking,
+  Dimensions,
+  LayoutAnimation,
+  Text,
+  View,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import * as Permissions from 'expo-permissions';
+import * as Location from 'expo-location';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
+import Modal from '../../components/modals/Modal'
+import UpCountryOrderStatus from '../../components/modals/UpCountryOrderStatus'
+class Camera extends Component {
+  state = {
+    hasCameraPermission: null,
+    lastScannedUrl: null,
+  };
 
-export default function App() {
-
-    const takePicture = async () => {
-        if (!camera) return
-        const photo = await Camera.takePictureAsync()
-        console.log(photo)
-        
-      }
-  const [type, setType] = useState(CameraType.back);
-  const [permission, requestPermission] = Camera.useCameraPermissions();
-
-  if (!permission) {
-    // Camera permissions are still loading
-    return <View />;
+  componentDidMount() {
+    this._requestCameraPermission();
   }
-  
-  if (!permission.granted) {
-    // Camera permissions are not granted yet
+
+  _requestCameraPermission = async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      this.setState({
+        hasCameraPermission: status === 'granted',
+      });
+  };
+
+handleBarCodeScanned = async({ type, data }) => {
+ 
+      let order = data
+      this.props.setscanned(order)
+ 
+  };
+
+  render() {
     return (
       <View style={styles.container}>
-        <Text style={{ textAlign: 'center' }}>
-          We need your permission to show the camera
-        </Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        <Modal />
+        <UpCountryOrderStatus navigation={this.props.navigation}/>
+        {this.state.hasCameraPermission === null ? (
+          <Text>Requesting for camera permission</Text>
+        ) : this.state.hasCameraPermission === false ? (
+          <Text style={{ color: '#fff' }}>
+            Camera permission is not granted
+          </Text>
+        ) : (
+          <View
+            style={{
+              backgroundColor: 'green',
+              height: Dimensions.get('window').height,
+              width: Dimensions.get('window').width,
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
+
+<BarCodeScanner
+        onBarCodeScanned={({ type, data })=> this.handleBarCodeScanned({ type, data })}
+        style={{
+          height: '80%',
+          width: '80%',
+
+        }}
+      />
+            
+          </View>
+        )}
+
+        {this._maybeRenderUrl()}
+
+       
       </View>
     );
   }
-  
 
-  function toggleCameraType() {
-    setType((current) => (
-      current === CameraType.back ? CameraType.front : CameraType.back
-    ));
-  }
+  _handlePressUrl = () => {
+    Alert.alert(
+      'Open this URL?',
+      this.state.lastScannedUrl,
+      [
+        {
+          text: 'Yes',
+          onPress: () => Linking.openURL(this.state.lastScannedUrl),
+        },
+        { text: 'No', onPress: () => {} },
+      ],
+      { cancellable: false }
+    );
+  };
 
-  return (
-    <View style={styles.container}>
-      <Camera style={styles.camera} type={type}>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={takePicture}>
-            <Text style={styles.text}>Flip Camera</Text>
-          </TouchableOpacity>
-        </View>
-      </Camera>
-    </View>
-  );
+  _handlePressCancel = () => {
+    this.setState({ lastScannedUrl: null });
+  };
+
+  _maybeRenderUrl = () => {
+    if (!this.state.lastScannedUrl) {
+      return;
+    }
+
+    return (
+      <View style={styles.bottomBar}>
+        <TouchableOpacity style={styles.url} onPress={this._handlePressUrl}>
+          <Text numberOfLines={1} style={styles.urlText}>
+            {this.state.lastScannedUrl}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.cancelButton}
+          onPress={this._handlePressCancel}>
+          <Text style={styles.cancelButtonText}>Cancel</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 }
+
+
+
+function mapStateToProps( state ) {
+  return { 
+   user:state.auth.user,
+  };
+}
+
+export default connect(mapStateToProps, actions)(Camera);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#000',
+  },
+  bottomBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    padding: 15,
+    flexDirection: 'row',
+  },
+  url: {
+    flex: 1,
+  },
+  urlText: {
+    color: '#fff',
+    fontSize: 20,
+  },
+  cancelButton: {
+    marginLeft: 10,
+    alignItems: 'center',
     justifyContent: 'center',
   },
-  camera: {
-    flex: 1,
-  },
-  buttonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    margin: 64,
-  },
-  button: {
-    flex: 1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
+  cancelButtonText: {
+    color: 'rgba(255,255,255,0.8)',
+    fontSize: 18,
   },
 });

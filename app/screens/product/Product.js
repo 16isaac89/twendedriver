@@ -16,6 +16,7 @@ import {
   StyleSheet,
   Text,
   View,
+  ActivityIndicator
 } from 'react-native';
 
 // import utils
@@ -26,12 +27,15 @@ import Button from '../../components/buttons/Button';
 import {Caption, Heading5, SmallText} from '../../components/text/CustomText';
 import Icon from '../../components/icon/Icon';
 import TouchableItem from '../../components/TouchableItem';
-
+import { Ionicons } from '@expo/vector-icons'; 
 // import colors
 import Colors from '../../theme/colors';
 
 //import sample data
 import sample_data from '../../config/sample-data';
+
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
 
 // Product Config
 const IOS = Platform.OS === 'ios';
@@ -43,9 +47,77 @@ const CLOSE_ICON = IOS ? 'ios-close' : 'md-close';
 const RATING_ICON = IOS ? 'ios-star' : 'md-star';
 import styles from './styles'
 import Divider from '../../components/divider/Divider';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons,Entypo,MaterialCommunityIcons } from '@expo/vector-icons';
+import * as Linking from 'expo-linking';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import CompleteOrder from '../../components/modals/CompleteOrder.js';
 // Product
-export default class Product extends Component {
+class Product extends Component {
+  completetownorder = () =>{
+    let item = this.props.route.params.item 
+    this.props.setActiveTown(item)
+   // this.props.opencompletemodal()
+  }
+  componentDidMount(){
+    console.log(this.props.route.params.item.status)
+  }
+  completeorder = () =>{
+    if(this.props.route.params.item.status === 'completed'){
+          return  <Button
+          title={`Complete`}
+          titleColor={Colors.onPrimaryColor}
+          height={44}
+          color={Colors.primaryColor}
+
+          rounded
+          />
+    }else if(this.props.route.params.item.status === "cancelled"){
+      return  <Button
+      title={`Cancelled`}
+      titleColor={Colors.onPrimaryColor}
+      height={44}
+      color={"red"}
+      
+      rounded
+      />
+    }else{
+     
+        if(this.props.route.params.item.order_where === "upcountry"){
+         return (
+        
+          
+         <TouchableOpacity
+         onPress={()=> this.props.navigation.navigate('Camera')}
+          style={styles.button}
+          // title={`Scan`}
+          // titleColor={Colors.onPrimaryColor}
+          // height={44}
+          // color={"orange"}
+          // rounded
+          >
+            <MaterialCommunityIcons name="qrcode" size={50} color="black" />
+            <Text style={styles.buttonTitle}>Scan</Text>
+            </TouchableOpacity>
+       
+         )
+        }else{
+          return this.props.loader === true ? <ActivityIndicator size="large" color="#00ff00" /> :<Button
+          onPress={()=>this.completetownorder()}
+          title={`Complete Order`}
+          titleColor={Colors.onPrimaryColor}
+          height={44}
+          color={"orange"}
+          rounded
+          />
+        }
+     
+      
+    }
+  }
+ callrecipient = () =>{
+  let phone = this.props.route.params.item.recipientnumber
+  Linking.openURL(`tel:${phone}`);
+ }
   constructor(props) {
     super(props);
     this.state = {
@@ -57,6 +129,7 @@ export default class Product extends Component {
 
   navigateTo = (screen) => () => {
     const {navigation} = this.props;
+
     navigation.navigate(screen);
   };
 
@@ -67,7 +140,6 @@ export default class Product extends Component {
 
   onPressAddToFavorites = () => {
     const {favorite} = this.state;
-
     this.setState({
       favorite: !favorite,
     });
@@ -128,13 +200,14 @@ export default class Product extends Component {
   render() {
     const {product, favorite, extras} = this.state;
     const {price, description, quantity, total} = product;
-
+let order = this.props.route.params.item
     return (
       <Fragment>
         <StatusBar
           backgroundColor={Colors.statusBarColor}
           barStyle="light-content"
         />
+       <CompleteOrder navigation={this.props.navigation}/>
         <SafeAreaView style={styles.topArea} />
         <View style={styles.screenContainer}>
           <ScrollView>
@@ -157,7 +230,7 @@ export default class Product extends Component {
                   styles.right,
                   favorite && styles.favorite,
                 ]}>
-                <Text style={styles.textStyle3}>Trip: #001212</Text>
+                <Text style={styles.textStyle3}>Trip: #{order.id}</Text>
               </View>
             </View>
 
@@ -165,7 +238,7 @@ export default class Product extends Component {
             <MaterialIcons name="location-history" size={24} color="black" />
                     <View style={styles.location}>
                       <Text style={styles.textStyle}>Pickup Location</Text>
-                      <Text style={styles.textStyle3}>adsasdasdasdasdasasdda asdasdasdasd asdasdasdasdf asdasdasdasd</Text>
+                      <Text style={styles.textStyle3}>{order.from}</Text>
                       <Divider type="full-bleed" color={Colors.primaryColor}/>
                     </View>
                     
@@ -176,7 +249,7 @@ export default class Product extends Component {
               <Ionicons name="ios-location-sharp" size={24} color="black" />
                     <View style={styles.location}>
                       <Text style={styles.textStyle}>Drop off Location</Text>
-                      <Text style={styles.textStyle3}>adsasdasdasdasdasasdda asdasdasdasd asdasdasdasdf asdasdasdasd</Text>
+                      <Text style={styles.textStyle3}>{order.to}</Text>
                       <Divider type="full-bleed" color={Colors.primaryColor}/>
                     </View>
                     
@@ -184,31 +257,22 @@ export default class Product extends Component {
 
 
               <View style={styles.from}>
-            <Icon
-                      name={CLOSE_ICON}
-                      size={IOS ? 24 : 22}
-                      color={Colors.secondaryText}
-                     
-                    />
+              <MaterialIcons name="date-range" size={24} color="black" />
                     <View style={styles.location}>
                       <Text style={styles.textStyle}>Requested Date | Time</Text>
-                      <Text style={styles.textStyle3}>adsasdasdasdasdasasdda asdasdasdasd asdasdasdasdf asdasdasdasd</Text>
+                      <Text style={styles.textStyle3}>{order.created_at}</Text>
                       <Divider type="full-bleed" color={Colors.primaryColor}/>
                     </View>
                     
               </View>
 
               <View style={styles.from}>
-            <Icon
-                      name={CLOSE_ICON}
-                      size={IOS ? 24 : 22}
-                      color={Colors.secondaryText}
-                    />
+              <MaterialCommunityIcons name="map-marker-distance" size={24} color="black" />
                     <View style={styles.distance}>
 
                     <View style={styles.distance1}>
                       <Text style={styles.textStyle}>Distance</Text>
-                      <Text style={styles.textStyle3}>56KM</Text>
+                      <Text style={styles.textStyle3}>{order.distance}KM</Text>
                       </View>
 
                       <Divider type="full-bleed" color={Colors.primaryColor}/>
@@ -216,7 +280,7 @@ export default class Product extends Component {
               </View>
 
 
-              <View style={styles.from}>
+              {/* <View style={styles.from}>
             <Icon
                       name={CLOSE_ICON}
                       size={IOS ? 24 : 22}
@@ -228,32 +292,29 @@ export default class Product extends Component {
                       <Divider type="full-bleed" color={Colors.primaryColor}/>
                     </View>
                     
-              </View>
+              </View> */}
 
 
               <View style={styles.from}>
-            <Icon
-                      name={CLOSE_ICON}
-                      size={IOS ? 24 : 22}
-                      color={Colors.secondaryText}
-                    />
+              <MaterialCommunityIcons name="cash-100" size={24} color="black" />
                     <View style={styles.location}>
                       <Text style={styles.textStyle}>Fare</Text>
-                      <Text style={styles.textStyle3}>adsasdasdasdasdasasdda asdasdasdasd asdasdasdasdf asdasdasdasd</Text>
+                      <Text style={styles.textStyle3}>{order.money}</Text>
                       <Divider type="full-bleed" color={Colors.primaryColor}/>
                     </View>
                     
               </View>
 
               <View style={styles.from}>
-            <Icon
-                      name={CLOSE_ICON}
-                      size={IOS ? 24 : 22}
-                      color={Colors.secondaryText}
-                    />
+              <Entypo name="phone" size={24} color="black" />
                     <View style={styles.location}>
-                      <Text style={styles.textStyle}>Payment Method</Text>
-                      <Text style={styles.textStyle3}>adsasdasdasdasdasasdda asdasdasdasd asdasdasdasdf asdasdasdasd</Text>
+                      <Text style={styles.textStyle}>Recipient Number</Text>
+                      <TouchableOpacity onPress={()=>this.callrecipient()}>
+                      <Text style={styles.textStyle3}>
+                        {order.recipientnumber}
+                        <Entypo name="phone" size={54} color="black" />
+                      </Text>
+                      </TouchableOpacity>
                       <Divider type="full-bleed" color={Colors.primaryColor}/>
                     </View>
                     
@@ -262,15 +323,7 @@ export default class Product extends Component {
           </ScrollView>
 
           <View style={styles.bottomButtonsContainer}>
-            <Button
-              onPress={this.navigateTo('Cart')}
-              title={`Add  $${total.toFixed(2)}`}
-              titleColor={Colors.onPrimaryColor}
-              height={44}
-              color={Colors.primaryColor}
-              
-              rounded
-            />
+           {this.completeorder()}
           </View>
         </View>
         <SafeAreaView style={styles.bottomArea} />
@@ -278,3 +331,19 @@ export default class Product extends Component {
     );
   }
 }
+
+function mapStateToProps( state ) {
+  return { 
+   latitude:state.auth.latitude,
+   longitude:state.auth.longitude,
+   speed:state.auth.speed,
+   active:state.order.active,
+   loader:state.order.loader,
+   orderstatus:state.order.orderstatus,
+   orderimage:state.order.orderimage,
+   completedstatus:state.order.completedstatus,
+   user:state.auth.user,
+  };
+}
+
+export default connect(mapStateToProps, actions)(Product);

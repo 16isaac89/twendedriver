@@ -23,7 +23,13 @@ import {
     SET_SOUND,
     STOP_SOUND,
     MODAL_ON,
-    ORDER_ASSIGNED_CLOSE
+    ORDER_ASSIGNED_CLOSE,
+    MODAL_OFF,
+    SET_TOWN_ACTIVE,
+    SELECT_ORDER_STATUS,
+    CLOSE_UPCOUNTRY_MODAL,
+    OPEN_UPCOUNTRY_MODAL,
+    SET_SCANNED
  } from '../actions/types';
  import axios from 'axios'
  import {commonurl} from '../../utils/utilities'
@@ -67,19 +73,12 @@ import Echo from 'laravel-echo';
          require('../../../assets/order.wav')
       );
       await sound.playAsync();
-      //dispatch({type:SET_SOUND,payload:sound})
         dispatch({type:SET_NOTIFICATION_ORDER,payload:{notifications,sound}});
-        let apiKey = "AB123QWE234RTY"
-        let cluster = "mti"
-      
-
-
-
+        
     }
  }
 
   playSound = async()=> {
-   
    const { sound } = await Audio.Sound.createAsync(
       require('../../../assets/order.wav')
    );
@@ -147,6 +146,7 @@ export const stopSound = async(sound)=> {
 
  export const getOrders=(id)=>{
     return async(dispatch)=>{
+      dispatch({type:ORDER_LOADER});
         axios.post(ROOT_URL+"/driver/orders", {
             id:id
          })
@@ -164,39 +164,50 @@ export const stopSound = async(sound)=> {
     }
  }
 
- export const upDateOrder = (latitude,longitude,order,id) =>{
+ export const upDateOrder = (latitude,longitude,order,id,orderstatus,navigation) =>{
     return async(dispatch)=>{
-        dispatch({type:ORDER_LOADER})
+        dispatch({type:MODAL_ON})
         axios.post(ROOT_URL+"/driver/scan", {
             latitude:latitude,
             longitude:longitude,
             order:order,
-            id:id
+            id:id,
+            orderstatus:orderstatus
          })
              .then( async(response)  => {
-               
                alert(response.data.message)
                  dispatch({type:SCAN_COMPLETE})
+                 navigation.navigate("Town");
              })
              .catch(function (error) {
                 dispatch({type:SEND_FAILED})
+                alert('Failed please try again')
                  console.log(error.response)
              })
     }
  }
 
- export const setActiveOrder = (item) =>{
+ export const setActiveOrder = (item,accept,navigation,driver) =>{
     return async(dispatch)=>{
       dispatch({type:MODAL_ON})
       let id = item.id
-      axios.post(ROOT_URL+"/accept/order", {
-         id:id
+      axios.post(ROOT_URL+"/order/accept", {
+         order:id,
+         accept:accept,
+         driver:driver
       })
           .then( async(response)  => {
+            if(accept === 1){
             await AsyncStorage.setItem('activeorder', JSON.stringify(item))
             dispatch({type:SET_ACTIVE_ORDER,payload:item})
+            navigation.navigate("Accepted");
+            }else{
+               await AsyncStorage.removeItem('activeorder')
+               dispatch({type:MODAL_OFF})
+            }
           })
-          .catch(function (error) {
+          .catch(function async(error) {
+            AsyncStorage.removeItem('activeorder')
              dispatch({type:SEND_FAILED})
               console.log(error.response)
           })
@@ -378,10 +389,14 @@ export const stopSound = async(sound)=> {
             driver:driver
          })
              .then( async(response)  => {
+               let orders = response.data.orders
+               let cancelled = response.data.cancelled
+               let completed = response.data.completed
+                //dispatch({type:GET_ORDERS,payload:{orders,cancelled,completed}})
                 let status = response.data.order.status
                 let income = response.data.income
                 await AsyncStorage.removeItem('activeorder');
-                 dispatch({type:ORDER_COMPLETED,payload:{status,income}})
+                 dispatch({type:ORDER_COMPLETED,payload:{status,income,orders,cancelled,completed}})
              })
              .catch(function (error) {
                 dispatch({type:SEND_FAILED})
@@ -396,12 +411,12 @@ return()=>{
    window.Pusher = Pusher;
    Pusher.logToConsole = true;
 
-   let PusherClient = new Pusher('87E46D36C9F3410D',{
+   let PusherClient = new Pusher('mojskin-developer',{
       cluster: "mt1",
-       wssHost: 'isaackaka.com',
+       wsHost: '127.0.0.1',
        wssPort: '6001',
        wsPort: '6001',
-       enabledTransports: ["ws", "wss"],
+       enabledTransports: ["ws"],
        // forceTLS: false,
        enableStats: true,
        forceTLS: false
@@ -419,4 +434,34 @@ return()=>{
 }
  }
 
+
+ export const setActiveTown = (item) =>{
+   return(dispatch)=>{
+      dispatch({type:SET_TOWN_ACTIVE,payload:item})
+   }
+ }
+
+ export const upcountrystatus = (status) =>{
+   return (dispatch)=>{
+      dispatch({type:SELECT_ORDER_STATUS,payload:status})
+   }
+ }
+
+ 
+ export const openupcountrymodal = () =>{
+return(dispatch)=>{
+   dispatch({type:OPEN_UPCOUNTRY_MODAL})
+}
+ }
+
+ export const closeupcountrymodal = () =>{
+   return(dispatch)=>{
+      dispatch({type: CLOSE_UPCOUNTRY_MODAL})
+   }
+}
+export const setscanned = (order) =>{
+   return(dispatch)=>{
+      dispatch({type: SET_SCANNED,payload:order})
+   }
+}
  

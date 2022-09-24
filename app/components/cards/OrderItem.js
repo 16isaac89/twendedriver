@@ -7,7 +7,7 @@
 
 // import dependencies
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View,Text} from 'react-native';
 
 // import components
 import Button from '../buttons/Button';
@@ -56,11 +56,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   item: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     justifyContent:'center',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    height: 36,
+    paddingHorizontal: 10,
+    height: 18,
     marginBottom:20,
   },
   footer: {
@@ -89,6 +89,14 @@ const styles = StyleSheet.create({
     color: Colors.primaryColor,
     textAlign: 'left',
   },
+  text:{
+    color: "black",
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 15,
+    paddingHorizontal: 5,
+    textAlign: 'center'
+  }
 });
 
 
@@ -136,10 +144,10 @@ const OrderItem = ({
       <View style={styles.pv8}>
      
               <View style={styles.item}>
-                 <Subtitle1>From: {orderFrom}</Subtitle1>
+                 <Text style={styles.text}>From: {orderFrom}</Text>
               </View>
               <View style={styles.item}>
-              <Subtitle1>To:    {orderTo}</Subtitle1> 
+              <Subtitle1>To:{orderTo}</Subtitle1> 
               </View>
         
       </View>

@@ -20,7 +20,7 @@ import OrderItem from '../../components/cards/OrderItem';
 import {Caption, Subtitle1, Subtitle2} from '../../components/text/CustomText';
 // import colors
 import Colors from '../../theme/colors';
-
+import Modal from '../../components/modals/Modal'
 //import sample data
 import sample_data from '../../config/sample-data';
 
@@ -92,7 +92,7 @@ import * as actions from '../../redux/actions';
           backgroundColor={Colors.statusBarColor}
           barStyle="dark-content"
         />
-
+<Modal />
         <View style={styles.container}>
           {
             orders.length > 0 ?

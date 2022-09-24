@@ -13,11 +13,13 @@ import {saveNotificationToken,updateLocation} from './app/redux/actions'
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
 const LOCATION_TASK_NAME = 'background-location-task';
+const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK'
 
-//0756686374
+
 class App extends Component {
 
   trackdriver = async() =>{
+    
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
       setErrorMsg('Permission to access location was denied');
@@ -25,7 +27,7 @@ class App extends Component {
     }
     await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
         accuracy: Location.Accuracy.Balanced,
-        timeInterval: 6000,
+        timeInterval: 5000,
   foregroundService: {
     notificationTitle: "BackgroundLocation Is On",
     notificationBody: "We are tracking your location",
@@ -68,26 +70,34 @@ class App extends Component {
 
   
   componentDidMount(){
-    this.registerForPushNotificationsAsync().then(token => 
+    this.registerForPushNotificationsAsync().then(token => {
+      console.log(token)
       store.dispatch(saveNotificationToken(token))
-      );
+    });
 
+    TaskManager.defineTask(
+      BACKGROUND_NOTIFICATION_TASK,
+      ({ data, error, executionInfo }) => handleNewNotification(data.notification)
+    ) 
+    TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
+      if (error) {
+      console.log(error)
+        return;
+      }
+      if (data) {
+      
+          const { locations } = data;
+          let position = locations[0].coords
+        console.log(position)
+          store.dispatch(updateLocation(position))
+          //dispatch({type:GET_LOCATION,payload:position})
+      
+      }
+    });
       this.trackdriver()
-  TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
-    if (error) {
-    
-      return;
-    }
-    if (data) {
-    
-        const { locations } = data;
-        let position = locations[0].coords
-       
-        store.dispatch(updateLocation(position))
-        //dispatch({type:GET_LOCATION,payload:position})
-    
-    }
-  });
+ 
+
+  
       
   }
   render(){

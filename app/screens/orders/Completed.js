@@ -23,7 +23,7 @@ import Colors from '../../theme/colors';
 
 //import sample data
 import sample_data from '../../config/sample-data';
-
+import Modal from '../../components/modals/Modal'
 // Orders Styles
 const styles = StyleSheet.create({
   screenContainer: {
@@ -89,7 +89,7 @@ import order from '../../redux/reducers/order';
           backgroundColor={Colors.statusBarColor}
           barStyle="dark-content"
         />
-
+<Modal />
         <View style={styles.container}>
           {
             orders.length > 0 ?

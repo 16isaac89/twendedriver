@@ -41,5 +41,15 @@ export const CLEAR_STATE = 'clear_state'
 export const SET_SOUND = 'set_sound'
 export const STOP_SOUND = 'stop_sound'
 export const MODAL_ON = 'modal_on'
+export const MODAL_OFF = 'modal_off'
 
 export const ORDER_ASSIGNED_CLOSE = 'order_assigned_close'
+export const SHOW_DATE_PICKER = 'show_date_picker'
+export const HIDE_DATE_PICKER = 'hide_date_picker'
+export const SET_DATE = 'set_date'
+export const SET_TOWN_ACTIVE = 'set_town_active'
+export const SELECT_ORDER_STATUS = "select_order_status"
+export const OPEN_UPCOUNTRY_MODAL = 'open_upcountry_modal'
+export const CLOSE_UPCOUNTRY_MODAL = 'close_upcountry_modal'
+export const SET_SCANNED = 'set_scanned'
+

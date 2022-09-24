@@ -8,7 +8,10 @@ import {
    REG_LOADER,
    LOGIN_OUT,
    TOKEN_SENT,
-   GET_LOCATION
+   GET_LOCATION,
+   SHOW_DATE_PICKER,
+   HIDE_DATE_PICKER,
+   SET_DATE
 } from '../actions/types';
 import axios from "axios"
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -155,4 +158,24 @@ export const saveNotificationToken = (token) =>{
 //         navigation.navigate("Town");
 //     }
 //   }
+
+export const showdate = () =>{
+    return(dispatch)=>{
+dispatch({type:SHOW_DATE_PICKER})
+    }
+}
+
+export const hidedate = () =>{
+    return(dispatch)=>{
+        dispatch({type:HIDE_DATE_PICKER})
+    }
+}
+
+export const setdate = (date,hdate) =>{
+    return(dispatch)=>{
+        dispatch({type:SET_DATE,payload:{date,hdate}})
+    }
+}
+
+
 

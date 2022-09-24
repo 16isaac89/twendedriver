@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Town from '../screens/Town/Town'
 import Settings from '../screens/settings/Settings'
 import Checkout from '../screens/checkout/Checkout'
+import Earnings from '../screens/earnings/Earnings'
 const Drawer = createDrawerNavigator();
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import TopBar from './TopBar' 
@@ -12,7 +13,8 @@ import Wallet from './Wallet'
 import DrawerComponent from '../components/navigation/DrawerComponent'
 import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
-
+import { MaterialIcons } from '@expo/vector-icons'; 
+import { Entypo } from '@expo/vector-icons'; 
 
 
 
@@ -42,8 +44,8 @@ class DrawerNavigator extends Component {
             drawerIcon: ({focused, size}) => (
                <Icon
                   name="location-city"
-                  size={20}
-                  color={focused ? '#7cc' : '#ccc'}
+                  size={40}
+                  color={focused ? '#7cc' : 'green'}
                />
             ),
          }}
@@ -56,8 +58,8 @@ class DrawerNavigator extends Component {
             drawerIcon: ({focused, size}) => (
                <Icon
                   name="settings"
-                  size={20}
-                  color={focused ? '#7cc' : '#ccc'}
+                  size={40}
+                  color={focused ? '#7cc' : 'green'}
                />
             ),
          }}
@@ -70,15 +72,12 @@ class DrawerNavigator extends Component {
             title: 'Trips',
             headerShown: false, gestureEnabled: false,
             drawerIcon: ({focused, size}) => (
-               <Icon
-                  name="bookmark"
-                  size={20}
-                  color={focused ? 'orange' : '#ccc'}
-               />
+               <MaterialIcons name="trip-origin" size={40} color={focused ? 'orange' : 'green'} />
+              
             ),
          }}
         />
-         <Drawer.Screen 
+         {/* <Drawer.Screen 
         name="Wallet" 
         component={Wallet} 
         options={{
@@ -88,13 +87,13 @@ class DrawerNavigator extends Component {
                <Icon
                   name="bookmark"
                   size={20}
-                  color={focused ? 'orange' : '#ccc'}
+                  color={focused ? 'orange' : 'green'}
                />
             ),
          }}
-        />
+        /> */}
 
-<Drawer.Screen 
+{/* <Drawer.Screen 
         name="Checkout" 
         component={Checkout} 
         options={{
@@ -103,8 +102,20 @@ class DrawerNavigator extends Component {
                <Icon
                   name="bookmark"
                   size={20}
-                  color={focused ? 'orange' : '#ccc'}
+                  color={focused ? 'orange' : 'green'}
                />
+            ),
+         }}
+        /> */}
+
+        
+<Drawer.Screen 
+        name="Earnings" 
+        component={Earnings} 
+        options={{
+            title: 'Earnings',
+            drawerIcon: ({focused, size}) => (
+               <Entypo name="bar-graph" size={40} color={focused ? 'orange' : 'green'} />
             ),
          }}
         />

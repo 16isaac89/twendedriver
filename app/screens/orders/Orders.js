@@ -47,6 +47,7 @@ const RATING_ICON = IOS ? 'ios-star' : 'md-star';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 import order from '../../redux/reducers/order';
+import Modal from '../../components/modals/Modal'
 
 // Orders
  class Orders extends Component {
@@ -64,9 +65,8 @@ import order from '../../redux/reducers/order';
     navigation.goBack();
   };
 
-  navigateTo = screen => () => {
-    const {navigation} = this.props;
-    navigation.navigate(screen);
+  navigateTo =  (item) => {
+    this.props.navigation.navigate('Product',{'item':item})
   };
 
   keyExtractor = item => item.id.toString();
@@ -81,7 +81,8 @@ import order from '../../redux/reducers/order';
       orderStatus={item.status}
       orderFrom={item.from}
       orderTo={item.to}
-      onPress={this.navigateTo('Product')}
+      
+      onPress={()=>this.navigateTo(item)}
     />
   );
 
@@ -89,17 +90,12 @@ import order from '../../redux/reducers/order';
     const orders = this.props.orders
     return (
       <SafeAreaView style={styles.screenContainer}>
-       
+       <Modal />
 
         <StatusBar
           backgroundColor={Colors.statusBarColor}
           barStyle="dark-content"
         />
-
-
-
-
-
 
         <View style={styles.container}>
           {

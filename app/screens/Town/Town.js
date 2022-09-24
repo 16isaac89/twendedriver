@@ -3,20 +3,39 @@ import React, {Component, Fragment} from 'react';
 
 
 import Colors from '../../theme/colors';
-import MapView, {ProviderPropType, Marker, AnimatedRegion}from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions,TouchableOpacity } from 'react-native';
+import MapView, {ProviderPropType, Marker, AnimatedRegion, MarkerAnimated }from 'react-native-maps';
+import { StyleSheet, Text, View, Dimensions,TouchableOpacity,Animated,Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import OrderModal from '../../components/modals/OrderModal';
 import Modal from '../../components/modals/Modal';
 import { FontAwesome } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
+import ActivityIndicatorModal from '../../components/modals/ActivityIndicatorModal';
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 class Town extends Component {
   
- componentDidMount(){
-  this.props.listenorder()
- }
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const duration = 500
+  
+    if (this.props.coordinate !== nextProps.coordinate) {
+      if (Platform.OS === 'android') {
+        if (this.marker) {
+          this.marker.animateMarkerToCoordinate(
+            nextProps.coordinate,
+            duration
+          );
+        }
+      } else {
+        this.state.coordinate.timing({
+          ...nextProps.coordinate,
+          useNativeDriver: true, // defaults to false if not passed explicitly
+          duration
+        }).start();
+      }
+    }
+  }
 
   render() {
     return (
@@ -24,14 +43,25 @@ class Town extends Component {
           <OrderModal navigation={ this.props.navigation }/>
           <Modal />
         <MapView style={styles.map}
+        region={{
+          latitude: this.props.latitude,
+          longitude: this.props.longitude,
+          latitudeDelta: 0.04864195044303443,
+          longitudeDelta: 0.040142817690068,
+        }}
          initialRegion={{
           latitude: this.props.latitude,
           longitude: this.props.longitude,
-            latitudeDelta: 0.1,
-            longitudeDelta: 0.1
+          latitudeDelta: 0.04864195044303443,
+          longitudeDelta: 0.040142817690068,
           }}
         >
-           
+           <Marker
+        ref={marker => { this.marker = marker }}
+        coordinate={this.props.coordinate}
+      >
+       <MaterialIcons name="delivery-dining" size={40} color="green" />
+        </Marker>
         </MapView>
 
         <View
@@ -129,7 +159,8 @@ function mapStateToProps( state ) {
    longitude:state.auth.longitude,
    speed:state.auth.speed,
    active:state.order.active,
-   earning:state.order.earning
+   earning:state.order.earning,
+   coordinate:state.auth.coordinate
   };
 }
 

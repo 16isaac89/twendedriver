@@ -7,7 +7,10 @@ import {
    LOGIN_FAIL,
    REG_LOADER,
    LOGIN_OUT,
-   GET_LOCATION
+   GET_LOCATION,
+   SHOW_DATE_PICKER,
+   HIDE_DATE_PICKER,
+   SET_DATE
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -17,9 +20,16 @@ const INITIAL_STATE = {
   regloader:false,
   user:"",
   loggedin:false,
-  latitude:8.7832,
-  longitude:34.5085,
-  speed:0
+  latitude:1.3733,
+  longitude:32.2903,
+  speed:0,
+  datepicker:false,
+  selectdate:'',
+  hdate:'',
+  coordinate:{
+    latitude:1.3733,
+    longitude:32.2903,
+  }
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -41,7 +51,16 @@ export default function(state = INITIAL_STATE, action) {
     case LOGIN_OUT:
       return{...state,loggedin:false}
     case GET_LOCATION:
-      return{...state,latitude:action.payload.latitude,longitude:action.payload.longitude,speed:action.payload.speed}
+      return{...state,latitude:action.payload.latitude,longitude:action.payload.longitude,speed:action.payload.speed, coordinate:{
+        latitude:action.payload.latitude,
+        longitude:action.payload.longitude,
+      }}
+    case SHOW_DATE_PICKER:
+      return{...state,datepicker:true}
+    case HIDE_DATE_PICKER:
+      return{...state,datepicker:false}
+    case SET_DATE:
+      return{...state,selectdate:action.payload.date,hdate:action.payload.hdate,datepicker:false}
     default:
       return state;
   }

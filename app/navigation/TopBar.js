@@ -44,11 +44,14 @@ import * as actions from '../redux/actions';
 const Tab = createMaterialTopTabNavigator();
 
 class TopBar extends Component {
+  componentDidMount(){
+    this.getOrders()
+  }
   getOrders = () =>{
-    // let id = this.props.user.id;
-    //   this.props.getOrders(id);
-    let navigation = this.props.navigation
-    this.props.navigates(navigation)
+    let id = this.props.user.id;
+    this.props.getOrders(id);
+    // let navigation = this.props.navigation
+    // this.props.navigates(navigation)
   }
   render(){
   return (
@@ -66,7 +69,7 @@ class TopBar extends Component {
               <View style={[styles.topButton, styles.right]}>
                 <TouchableItem onPress={()=>this.getOrders()} borderless>
                   <View style={styles.buttonIconContainer}>
-                  <Ionicons name="arrow-back" size={24} color="black" />
+                  <Ionicons name="refresh" size={24} color="black" />
                   </View>
                 </TouchableItem>
               </View>

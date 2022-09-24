@@ -122,5 +122,21 @@ export default StyleSheet.create({
     distance1:{
       flexDirection:'column',
       margin:5,
-    }
+    },
+    button: {
+      flexDirection:'row',
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 4,
+      width: 240,
+      height: 50,
+      backgroundColor: "#FFF",
+      marginBottom: 12,
+      borderRadius:25
+    },
+    buttonTitle: {
+      fontSize: 24,
+      color: "green",
+      fontWeight: "bold",
+    },
   });
