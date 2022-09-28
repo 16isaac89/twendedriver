@@ -23,12 +23,13 @@ Notifications.setNotificationHandler({
 
 Notifications.addNotificationReceivedListener( async(notification) => {
     let notifications = notification.request.content.data.order
-   console.log(AppState.currentState)
+   if(notification.request.content.data.nottype === 1){
     if (AppState.currentState == 'active' && notification.origin === 'received') {
       await store.dispatch(orderNotification(notifications));
   } else {
     await store.dispatch(orderNotification(notifications));
   }
+}
     
     // await store.dispatch(openModal());
     

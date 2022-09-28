@@ -326,7 +326,8 @@ function mapStateToProps( state ) {
     password:state.auth.password,
     regloader:state.auth.regloader,
     isloggedin:state.auth.loggedin,
-    order:state.order.order
+    order:state.order.order,
+    internetstate:state.auth.internetstate
   };
 }
 

@@ -10,7 +10,8 @@ import {
    GET_LOCATION,
    SHOW_DATE_PICKER,
    HIDE_DATE_PICKER,
-   SET_DATE
+   SET_DATE,
+   SET_INTERNET_STATE
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -24,12 +25,16 @@ const INITIAL_STATE = {
   longitude:32.2903,
   speed:0,
   datepicker:false,
-  selectdate:'',
+  selectdate:new Date(),
   hdate:'',
   coordinate:{
     latitude:1.3733,
     longitude:32.2903,
-  }
+  },
+  dateorders:[],
+  driverpercent:0,
+  internetstate:false,
+  internetstatemodal:false
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -60,7 +65,10 @@ export default function(state = INITIAL_STATE, action) {
     case HIDE_DATE_PICKER:
       return{...state,datepicker:false}
     case SET_DATE:
-      return{...state,selectdate:action.payload.date,hdate:action.payload.hdate,datepicker:false}
+      return{...state,selectdate:action.payload.date,hdate:action.payload.hdate,datepicker:false,
+        regloader:false,dateorders:action.payload.orders,driverpercent:action.payload.percentage}
+    case SET_INTERNET_STATE:
+      return{...state,internetstate:action.payload,internetstatemodal:action.payload === true ? false : true}
     default:
       return state;
   }

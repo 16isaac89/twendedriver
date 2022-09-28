@@ -9,6 +9,10 @@ import * as Device from 'expo-device';
 import { Provider } from 'react-redux';
 import store from './app/redux/store'
 import {saveNotificationToken,updateLocation} from './app/redux/actions'
+import NetworkProvider from './app/config/Network';
+import Nonetwork from './app/components/modals/Nonetwork'
+import OrderModal from './app/components/modals/OrderModal';
+
 
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
@@ -71,7 +75,6 @@ class App extends Component {
   
   componentDidMount(){
     this.registerForPushNotificationsAsync().then(token => {
-      console.log(token)
       store.dispatch(saveNotificationToken(token))
     });
 
@@ -96,7 +99,8 @@ class App extends Component {
     });
       this.trackdriver()
  
-
+      
+      
   
       
   }
@@ -104,7 +108,12 @@ class App extends Component {
   return (
     <SafeAreaProvider>
        <Provider store={store}>
+        <NetworkProvider>
       <MainNavigator />
+      <Nonetwork />
+      <OrderModal navigation={ this.props.navigation } />
+     
+      </NetworkProvider>
       </Provider>
     </SafeAreaProvider>
   );

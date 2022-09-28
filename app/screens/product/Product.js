@@ -47,7 +47,7 @@ const CLOSE_ICON = IOS ? 'ios-close' : 'md-close';
 const RATING_ICON = IOS ? 'ios-star' : 'md-star';
 import styles from './styles'
 import Divider from '../../components/divider/Divider';
-import { MaterialIcons,Entypo,MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialIcons,Entypo,MaterialCommunityIcons,FontAwesome5 } from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CompleteOrder from '../../components/modals/CompleteOrder.js';
@@ -59,8 +59,33 @@ class Product extends Component {
    // this.props.opencompletemodal()
   }
   componentDidMount(){
-    console.log(this.props.route.params.item.status)
+    console.log("this.props.route.params.item")
+    console.log(this.props.route.params.item)
   }
+  opendest = () =>{
+    let dest = this.props.route.params.item.to
+    var url = "https://www.google.com/maps/dir/?api=1&travelmode=driving&dir_action=navigate&destination="+dest;
+Linking.canOpenURL(url).then(supported => {
+    if (!supported) {
+        console.log('Can\'t handle url: ' + url);
+    } else {
+        return Linking.openURL(url);
+    }
+}).catch(err => console.error('An error occurred', err)); 
+  }
+
+  openorigin = () =>{
+    let origin = this.props.route.params.item.from
+    var url = "https://www.google.com/maps/dir/?api=1&travelmode=driving&dir_action=navigate&destination="+origin;
+Linking.canOpenURL(url).then(supported => {
+    if (!supported) {
+        console.log('Can\'t handle url: ' + url);
+    } else {
+        return Linking.openURL(url);
+    }
+}).catch(err => console.error('An error occurred', err)); 
+  }
+ 
   completeorder = () =>{
     if(this.props.route.params.item.status === 'completed'){
           return  <Button
@@ -101,7 +126,7 @@ class Product extends Component {
        
          )
         }else{
-          return this.props.loader === true ? <ActivityIndicator size="large" color="#00ff00" /> :<Button
+          return this.props.sendingorder === true ? <ActivityIndicator size="large" color="#00ff00" /> :<Button
           onPress={()=>this.completetownorder()}
           title={`Complete Order`}
           titleColor={Colors.onPrimaryColor}
@@ -238,7 +263,12 @@ let order = this.props.route.params.item
             <MaterialIcons name="location-history" size={24} color="black" />
                     <View style={styles.location}>
                       <Text style={styles.textStyle}>Pickup Location</Text>
+                      <View style={{flexDirection:'row'}}>
                       <Text style={styles.textStyle3}>{order.from}</Text>
+                      <TouchableOpacity onPress={()=>this.openorigin()}>
+                      <Entypo name="direction" size={40} color="blue" />
+                      </TouchableOpacity>
+                      </View>
                       <Divider type="full-bleed" color={Colors.primaryColor}/>
                     </View>
                     
@@ -249,7 +279,12 @@ let order = this.props.route.params.item
               <Ionicons name="ios-location-sharp" size={24} color="black" />
                     <View style={styles.location}>
                       <Text style={styles.textStyle}>Drop off Location</Text>
+                      <View style={{flexDirection:'row'}}>
                       <Text style={styles.textStyle3}>{order.to}</Text>
+                      <TouchableOpacity onPress={()=>this.opendest()}>
+                      <FontAwesome5 name="directions" size={40} color="orange" />
+                      </TouchableOpacity>
+                      </View>
                       <Divider type="full-bleed" color={Colors.primaryColor}/>
                     </View>
                     
@@ -278,21 +313,6 @@ let order = this.props.route.params.item
                       <Divider type="full-bleed" color={Colors.primaryColor}/>
                     </View>    
               </View>
-
-
-              {/* <View style={styles.from}>
-            <Icon
-                      name={CLOSE_ICON}
-                      size={IOS ? 24 : 22}
-                      color={Colors.secondaryText}
-                    />
-                    <View style={styles.location}>
-                      <Text style={styles.textStyle}>Vehicle Type</Text>
-                      <Text >adsasdasdasdasdasasdda asdasdasdasd asdasdasdasdf asdasdasdasd</Text>
-                      <Divider type="full-bleed" color={Colors.primaryColor}/>
-                    </View>
-                    
-              </View> */}
 
 
               <View style={styles.from}>

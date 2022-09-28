@@ -52,4 +52,6 @@ export const SELECT_ORDER_STATUS = "select_order_status"
 export const OPEN_UPCOUNTRY_MODAL = 'open_upcountry_modal'
 export const CLOSE_UPCOUNTRY_MODAL = 'close_upcountry_modal'
 export const SET_SCANNED = 'set_scanned'
+export const SET_INTERNET_STATE = 'set_internet_state'
+export const SENDING_ORDER = 'sending_order'
 

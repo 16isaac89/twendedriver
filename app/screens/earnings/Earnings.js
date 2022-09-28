@@ -43,33 +43,14 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 class Earnings extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [
-        {id:1,  description:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit.", date:"2019-03-25 09:12:00", color:"#228B22", completed:1},
-        {id:2,  description:"Aenean massa. Cum sociis natoque penatibus et magnis.",     date:"2019-03-25 10:23:00", color:"#FF00FF", completed:0},
-        {id:3,  description:"nascetur ridiculus mus. Donec quam felis, ultricies dnec.", date:"2019-03-25 11:45:00", color:"#4B0082", completed:1},
-        {id:4,  description:"Donec pede justo, fringilla vel, aliquet nec, vulputdate.", date:"2019-03-25 09:27:00", color:"#20B2AA", completed:0},
-        {id:5,  description:"Nullam dictum felis eu pede mollis pretium. Integer tirr.", date:"2019-03-25 08:13:00", color:"#000080", completed:0},
-        {id:6,  description:"ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas st.", date:"2019-03-25 10:22:00", color:"#FF4500", completed:1},
-        {id:7,  description:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit.", date:"2019-03-25 13:33:00", color:"#FF0000", completed:0},
-        {id:8,  description:"Maecenas nec odio et ante tincidunt tempus. Donec vitae .", date:"2019-03-25 11:56:00", color:"#EE82EE", completed:0},
-        {id:9,  description:"Lorem ipsum dolor sit amet, consectetuer adipiscing elit.", date:"2019-03-25 15:00:00", color:"#6A5ACD", completed:0},
-        {id:10, description:" Aenean imperdiet. Etiam ultricies nisi vel augues aasde.", date:"2019-03-25 12:27:00", color:"#DDA0DD", completed:0},
-      ]
-    };
-  }
-
-  clickEventListener = (item) => {
-    Alert.alert("Item selected: "+item.description)
-  }
+  
 
   __getCompletedIcon = (item) => {
     if(item.completed == 1) {
-      return "https://img.icons8.com/flat_round/64/000000/checkmark.png";
-    } else {
       return "https://img.icons8.com/flat_round/64/000000/delete-sign.png";
+  
+    } else {
+      return "https://img.icons8.com/flat_round/64/000000/checkmark.png";
     }
   }
 
@@ -79,16 +60,20 @@ class Earnings extends Component {
     }
   }
   
-   onDateSelected=(value) =>{
-   let date = value.toISOString().split( "T" )[0]
-   let hdate = value.toDateString()
-   console.log(hdate)
-   this.props.setdate(value,hdate)
+   onDateSelected=(event, selectedDate) =>{
+   let date = selectedDate.toISOString().split( "T" )[0]
+   let hdate = selectedDate.toDateString()
+   let driver = this.props.user.id
+   // console.log(selectedDate,hdate,date,driver)
+   this.props.setdate(selectedDate,hdate,date,driver)
   };
 
  showPicker = () =>{
   this.props.showdate()
  }
+ navigateTo =  (item) => {
+  this.props.navigation.navigate('Product',{'item':item})
+};
   
   render(){
   return (
@@ -101,8 +86,6 @@ class Earnings extends Component {
                   </View>
                 </TouchableItem>
               </View>
-
-
               <View style={[styles.topButton, styles.right]}>
                 <TouchableItem onPress={()=>this.showPicker()} borderless>
                   <View style={styles.buttonIconContainer}>
@@ -115,7 +98,7 @@ class Earnings extends Component {
             <View style={styles.earningssum}>
               <Text style={styles.textStyle}>Today</Text>
               <Text style={styles.textStyle}>{this.props.hdate}</Text>
-<Text style={styles.textStyle2}>0.00</Text>
+<Text style={styles.textStyle2}>{this.props.total}</Text>
 <Text style={styles.textStyle}>Total Earnings</Text>
 <Text style={styles.textStyle}></Text>
             </View>
@@ -125,33 +108,44 @@ class Earnings extends Component {
                   mode={'date'}
                   display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                   is24Hour={true}
-                  onChange={()=>this.onDateSelected(value)}
+                  onChange={(event, selectedDate)=>this.onDateSelected(event, selectedDate)}
                   style={styles.datePicker}
                 />
         )}
 
 <View style={styles.container}>
-        <FlatList 
-          style={styles.tasks}
-          columnWrapperStyle={styles.listContainer}
-          data={this.state.data}
-          keyExtractor= {(item) => {
-            return item.id;
-          }}
-          renderItem={({item}) => {
-          return (
-            <TouchableOpacity style={[styles.card, {borderColor:item.color}]} onPress={() => {this.clickEventListener(item)}}>
-              <Image style={styles.image} source={{uri: this.__getCompletedIcon(item)}}/>
-              <View style={styles.cardContent}>
-              <Text style={styles.textStyle}>ID</Text>
-                <Text style={[styles.description, this.__getDescriptionStyle(item)]}>{item.description}</Text>
-                <Text style={[styles.description, this.__getDescriptionStyle(item)]}>{item.description}</Text>
-                <Text style={styles.textStyle}>Fare</Text>
-                <Text style={styles.textStyle}>Earning</Text>
-                <Text style={styles.date}>{item.date}</Text>
-              </View>
-            </TouchableOpacity>
-          )}}/>
+{
+  this.props.dateorders.length <= 0 ?
+  <View style={{alignContent:'center',alignItems:'center'}}>
+  <Text>No orders yet please search</Text>
+  </View>
+  :
+  <FlatList 
+  style={styles.tasks}
+  columnWrapperStyle={styles.listContainer}
+  data={this.props.dateorders}
+  keyExtractor= {(item) => {
+    return item.id;
+  }}
+  renderItem={({item}) => {
+  return (
+    <TouchableOpacity style={[styles.card, {borderColor:item.color}]} onPress={() => {this.navigateTo(item)}}>
+      <Image style={styles.image} source={{uri: this.__getCompletedIcon(item)}}/>
+      <View style={styles.cardContent}>
+      <Text style={styles.textStyle}>ID</Text>
+        <Text style={[styles.description, this.__getDescriptionStyle(item)]}>From: {item.from}</Text>
+        <Text style={[styles.description, this.__getDescriptionStyle(item)]}>To: {item.to}</Text>
+        <Text style={[styles.description, this.__getDescriptionStyle(item)]}>Fare: {item.money}</Text>
+        <Text style={[styles.description, this.__getDescriptionStyle(item)]}>Earning: {item.money*this.props.driverpercent}</Text>
+       
+        <Text style={styles.date}>{item.updated_at}</Text>
+      </View>
+    </TouchableOpacity>
+  )}}/>
+}
+       
+
+
       </View>
 
      
@@ -164,8 +158,14 @@ function mapStateToProps( state ) {
   return { 
   user:state.auth.user,
   datepicker:state.auth.datepicker,
-  selectdate:state.auth.selectdate || new Date(),
-  hdate:state.auth.hdate
+  selectdate:state.auth.selectdate,
+  hdate:state.auth.hdate,
+  dateorders:state.auth.dateorders,
+  user:state.auth.user,
+  driverpercent:state.auth.driverpercent,
+  total:state.auth.dateorders.reduce((accumulator, object) => {
+    return accumulator + object.money*state.auth.driverpercent
+  }, 0)
   };
 }
 

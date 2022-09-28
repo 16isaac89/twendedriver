@@ -29,7 +29,8 @@ alert("Please first verify the order with order txn id that was sent to the reci
     }else{
     let id =  this.props.active.id
     let driver = this.props.user.id
-    this.props.orderCompleted(id,driver)
+    let navigation = this.props.navigation
+    this.props.orderCompleted(id,driver,navigation)
     }
   }
 
@@ -65,7 +66,7 @@ alert("Please first verify the order with order txn id that was sent to the reci
 
 
   showTXNButton = () =>{
-    if(this.props.loader == true){
+    if(this.props.sendingorder == true){
      return <ActivityIndicator size="large" />
     }else{
      return <Button
@@ -79,7 +80,7 @@ alert("Please first verify the order with order txn id that was sent to the reci
     }
   } 
   showButton = () =>{
-    if(this.props.loader == true){
+    if(this.props.sendingorder == true){
      return <ActivityIndicator size="large" />
     }else{
      return <Button
@@ -192,8 +193,7 @@ function mapStateToProps( state ) {
     orderimage:state.order.orderimage,
     user:state.auth.user,
     txncheck:state.order.txncheck,
-    
-
+    sendingorder:state.order.sendingorder
   };
 }
 

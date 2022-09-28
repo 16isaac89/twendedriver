@@ -11,7 +11,8 @@ import {
    GET_LOCATION,
    SHOW_DATE_PICKER,
    HIDE_DATE_PICKER,
-   SET_DATE
+   SET_DATE,
+   SET_INTERNET_STATE
 } from '../actions/types';
 import axios from "axios"
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -165,15 +166,36 @@ dispatch({type:SHOW_DATE_PICKER})
     }
 }
 
+export const setinternetstate = (state) =>{
+   
+    return(dispatch)=>{
+dispatch({type:SET_INTERNET_STATE,payload:state})
+    }
+}
+
 export const hidedate = () =>{
     return(dispatch)=>{
         dispatch({type:HIDE_DATE_PICKER})
     }
 }
 
-export const setdate = (date,hdate) =>{
+export const setdate = (selectedDate,hdate,date,driver) =>{
     return(dispatch)=>{
-        dispatch({type:SET_DATE,payload:{date,hdate}})
+        dispatch({type:REG_LOADER})
+        axios.post(ROOT_URL+"/driver/date/orders", {
+           date:date,
+           driver:driver
+         })
+             .then( async(response)  => {
+                let orders = response.data.orders
+                let percentage = response.data.driver
+                dispatch({type:SET_DATE,payload:{selectedDate,hdate,orders,percentage}})
+             })
+             .catch(function (error) {
+                 console.log(error.response.message)
+                 
+             })
+        
     }
 }
 

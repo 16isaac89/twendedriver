@@ -28,7 +28,8 @@ import {
     SELECT_ORDER_STATUS,
     CLOSE_UPCOUNTRY_MODAL,
     OPEN_UPCOUNTRY_MODAL,
-    SET_SCANNED
+    SET_SCANNED,
+    SENDING_ORDER
  } from '../actions/types';
  
  const INITIAL_STATE = {
@@ -52,7 +53,8 @@ import {
  modal:false,
  upcountry:'Select order status',
  upcountrymodal:false,
- scanned:''
+ scanned:'',
+ sendingorder:false
  };
  
  export default function(state = INITIAL_STATE, action) {
@@ -99,11 +101,11 @@ import {
     case CLOSE_COMPLETE_ORDERMODAL:
       return{...state,completeordermodal:false}
     case ORDER_COMPLETED:
-      return{...state,orderstatus:action.payload.status,earning:action.payload.income,completedstatus:"1"}
+      return{...state,orderstatus:action.payload.status,earning:action.payload.income,completedstatus:"1",sendingorder:false,completeordermodal:false,}
     case TXN_CHECK_PASSED:
-      return{...state,txncheck:'1',loader:false,completeordermodal:false,}
+      return{...state,txncheck:'1',loader:false,completeordermodal:false,sendingorder:false}
     case SEND_FAILED:
-      return{...state,loader:false,modal:false}
+      return{...state,loader:false,modal:false,sendingorder:false}
     case CLEAR_STATE:
       return{...state,loader:false,txncheck:'0',active:'',otp:'',orderid:'',completedstatus:"0"}
     case SET_SOUND:
@@ -125,6 +127,8 @@ import {
       return{...state,upcountrymodal:false}
     case SET_SCANNED:
       return{...state,scanned:action.payload,upcountrymodal:true}
+    case SENDING_ORDER:
+      return{...state, sendingorder:true}
      default:
        return state;
    }

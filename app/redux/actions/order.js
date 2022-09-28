@@ -29,7 +29,8 @@ import {
     SELECT_ORDER_STATUS,
     CLOSE_UPCOUNTRY_MODAL,
     OPEN_UPCOUNTRY_MODAL,
-    SET_SCANNED
+    SET_SCANNED,
+    SENDING_ORDER
  } from '../actions/types';
  import axios from 'axios'
  import {commonurl} from '../../utils/utilities'
@@ -69,8 +70,17 @@ import Echo from 'laravel-echo';
  
  export const orderNotification = (notifications) =>{
     return async(dispatch)=>{
+      await Audio.setAudioModeAsync({
+         staysActiveInBackground: true,
+        
+         shouldDuckAndroid: true,
+         playThroughEarpieceAndroid: true,
+         allowsRecordingIOS: true,
+       });
       const { sound } = await Audio.Sound.createAsync(
-         require('../../../assets/order.wav')
+         require('../../../assets/order.wav'),
+         { shouldPlay: true, staysActiveInBackground: true }
+         
       );
       await sound.playAsync();
         dispatch({type:SET_NOTIFICATION_ORDER,payload:{notifications,sound}});
@@ -225,7 +235,7 @@ export const stopSound = async(sound)=> {
 
  export const sendOtp=(id,otp)=>{
     return async(dispatch)=>{
-        dispatch({type:OPEN_LOADER})
+        
         let address = ""
      
         const  {timezone}  = await Localization.getLocalizationAsync();
@@ -296,7 +306,7 @@ export const stopSound = async(sound)=> {
 
  export const checkTxn = (id,txn) => {
     return async(dispatch)=>{
-        dispatch({type:OPEN_LOADER})
+        dispatch({type:SENDING_ORDER})
         axios.post(ROOT_URL+"/order/checktxn", {
             id:id,
             txn:txn,
@@ -359,9 +369,9 @@ export const stopSound = async(sound)=> {
 
 
 
- export const orderCompleted =(id,driver)=>{
+ export const orderCompleted =(id,driver,navigation)=>{
     return async(dispatch)=>{
-         dispatch({type:OPEN_LOADER})
+      dispatch({type:SENDING_ORDER})
         let address = ""
      
         const  {timezone}  = await Localization.getLocalizationAsync();
@@ -395,8 +405,11 @@ export const stopSound = async(sound)=> {
                 //dispatch({type:GET_ORDERS,payload:{orders,cancelled,completed}})
                 let status = response.data.order.status
                 let income = response.data.income
+                console.log(completed)
                 await AsyncStorage.removeItem('activeorder');
+                alert('Order has been completed')
                  dispatch({type:ORDER_COMPLETED,payload:{status,income,orders,cancelled,completed}})
+                 navigation.navigate('TopBar')
              })
              .catch(function (error) {
                 dispatch({type:SEND_FAILED})
