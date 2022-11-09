@@ -1,109 +1,148 @@
 import React, {Component, Fragment} from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+
+import {PermissionsAndroid,Platform } from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {enableScreens} from 'react-native-screens';
 import MainNavigator from './app/navigation/MainNavigator';
-import * as Notifications from 'expo-notifications';
-import * as Device from 'expo-device';
+
 import { Provider } from 'react-redux';
 import store from './app/redux/store'
-import {saveNotificationToken,updateLocation} from './app/redux/actions'
+import {saveNotificationToken,updateLocation,checklogin,orderNotification} from './app/redux/actions'
 import NetworkProvider from './app/config/Network';
 import Nonetwork from './app/components/modals/Nonetwork'
 import OrderModal from './app/components/modals/OrderModal';
+import Geolocation from 'react-native-geolocation-service';
+import notifee from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
 
+import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 
-import * as Location from 'expo-location';
-import * as TaskManager from 'expo-task-manager';
-const LOCATION_TASK_NAME = 'background-location-task';
-const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK'
-
+let watchId = ''
 
 class App extends Component {
 
-  trackdriver = async() =>{
-    
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
-      return;
+   getFcmToken = async () => {
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+        console.log(fcmToken);
+        console.log("Your Firebase Token is:", fcmToken);
+    } else {
+        console.log("Failed", "No Token Recived");
     }
-    await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
-        accuracy: Location.Accuracy.Balanced,
-        timeInterval: 5000,
-  foregroundService: {
-    notificationTitle: "BackgroundLocation Is On",
-    notificationBody: "We are tracking your location",
-    notificationColor: "#ffce52",
-  },
-      });
+  };
+
+  // then use it
+  backgroundlocation = () =>{
+    ReactNativeForegroundService.add_task(
+      () => {
+
+        if (Platform.OS === 'android') {
+          PermissionsAndroid.requestMultiple(
+            [
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+            PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION
+            ]
+            ).then((result) => {
+              if (result['android.permission.ACCESS_COARSE_LOCATION']
+              && result['android.permission.ACCESS_BACKGROUND_LOCATION']
+              && result['android.permission.ACCESS_FINE_LOCATION'] === 'granted') {
+                Geolocation.watchPosition(
+                  (position) => {
+                    console.log(position.coords);
+                    store.dispatch(updateLocation(position))
+                    
+                  },
+                  (error) => {
+                    console.log(error);
+                  },
+                  { enableHighAccuracy: true, distanceFilter: 100,maximumAge: 0, fastestInterval: 2000,showsBackgroundLocationIndicator:true }
+                // this.getlocation()
+                )
+              } else if (result['android.permission.ACCESS_COARSE_LOCATION']
+              || result['android.permission.ACCESS_FINE_LOCATION']
+              || result['android.permission.ACCESS_BACKGROUND_LOCATION'] === 'never_ask_again') {
+                alert('Please Go into Settings -> Applications -> APP_NAME -> Permissions and Allow permissions to continue');
+              }
+            });
+        }
+
+
+        
+      },
+      {
+        delay: 1000,
+        onLoop: true,
+        taskId: 'taskid',
+        onError: (e) => console.log('Error logging:', e),
+      },
+    );
+  }
+  
+  
+
+  gettoken = async() =>{
+    const authStatus = await messaging().requestPermission();
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    if (enabled) {
+      this.getFcmToken();
+      console.log('Authorization status:', authStatus);
+    }
+  
+  }
+
+  getlocation = async() => {
+
+    if (Platform.OS === 'android') {
+      PermissionsAndroid.requestMultiple(
+        [
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+        PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION
+        ]
+        ).then((result) => {
+          if (result['android.permission.ACCESS_COARSE_LOCATION']
+          && result['android.permission.ACCESS_BACKGROUND_LOCATION']
+          && result['android.permission.ACCESS_FINE_LOCATION'] === 'granted') {
+            this.trackdriver()
+          } else if (result['android.permission.ACCESS_COARSE_LOCATION']
+          || result['android.permission.ACCESS_FINE_LOCATION']
+          || result['android.permission.ACCESS_BACKGROUND_LOCATION'] === 'never_ask_again') {
+            alert('Please Go into Settings -> Applications -> APP_NAME -> Permissions and Allow permissions to continue');
+          }
+        });
+    }
+}
+
+  trackdriver = async() =>{
+    watchId = Geolocation.watchPosition(
+      (position) => {
+        console.log("position");
+        console.log(position.coords.latitude);
+        store.dispatch(updateLocation(position))
+        
+      },
+      (error) => {
+        console.log(error);
+      },
+      { enableHighAccuracy: true, distanceFilter: 100,maximumAge: 0, fastestInterval: 2000,showsBackgroundLocationIndicator:true }
+    );
+  
 }
 
 
-  registerForPushNotificationsAsync = async() => {
-    let token;
-    if (Device.isDevice) {
-      const { status: existingStatus } = await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-      if (existingStatus !== 'granted') {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-      if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
-        return;
-      }
-      token = (await Notifications.getExpoPushTokenAsync()).data;
-     
-    } else {
-      alert('Must use physical device for Push Notifications');
-    }
   
-    if (Platform.OS === 'android') {
-      await Notifications.setNotificationChannelAsync('default', {
-        name: 'default',
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [0, 250, 250, 250],
-        lightColor: '#FF231F7C',
-      });
-    }
+
   
-    return token;
+  async componentDidMount(){
+   this.gettoken()
+   this.getlocation()  
+   this.backgroundlocation() 
   }
 
   
-  componentDidMount(){
-    this.registerForPushNotificationsAsync().then(token => {
-      store.dispatch(saveNotificationToken(token))
-    });
-
-    TaskManager.defineTask(
-      BACKGROUND_NOTIFICATION_TASK,
-      ({ data, error, executionInfo }) => handleNewNotification(data.notification)
-    ) 
-    TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
-      if (error) {
-      console.log(error)
-        return;
-      }
-      if (data) {
-      
-          const { locations } = data;
-          let position = locations[0].coords
-        console.log(position)
-          store.dispatch(updateLocation(position))
-          //dispatch({type:GET_LOCATION,payload:position})
-      
-      }
-    });
-      this.trackdriver()
- 
-      
-      
-  
-      
-  }
   render(){
   return (
     <SafeAreaProvider>

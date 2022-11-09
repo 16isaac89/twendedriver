@@ -10,15 +10,15 @@ import UnderlineTextInput from '../../components/textinputs/UnderlineTextInput';
 
 import Colors from '../../theme/colors';
 import Layout from '../../theme/layout';
-import { AntDesign } from '@expo/vector-icons';
-import * as Location from 'expo-location';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import moment from 'moment-timezone'
 // SignIn Config
 const PLACEHOLDER_TEXT_COLOR = Colors.secondaryColor;
 const INPUT_TEXT_COLOR = "black";
 const INPUT_BORDER_COLOR = Colors.secondaryColor;
 const INPUT_FOCUSED_BORDER_COLOR = Colors.secondaryColor;
-import * as Localization from 'expo-localization';
+
 
 
 class CompleteOrder extends Component {

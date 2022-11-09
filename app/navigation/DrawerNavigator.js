@@ -13,8 +13,8 @@ import Wallet from './Wallet'
 import DrawerComponent from '../components/navigation/DrawerComponent'
 import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
-import { MaterialIcons } from '@expo/vector-icons'; 
-import { Entypo } from '@expo/vector-icons'; 
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; 
+import  Entypo from 'react-native-vector-icons/Entypo'; 
 
 
 
@@ -34,7 +34,8 @@ class DrawerNavigator extends Component {
          activeTintColor: '#e91e63',
          itemStyle: {marginVertical: 5},
        }}
-       drawerContent={(props) => <DrawerComponent {...props} />}>
+       drawerContent={(props) => <DrawerComponent {...props} />}
+	   >
        
         <Drawer.Screen 
         name="Town" 

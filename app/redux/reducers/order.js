@@ -73,7 +73,8 @@ import {
         orders:action.payload.orders,
         cancelled:action.payload.cancelled,
         completed:action.payload.completed,
-        modal:false}
+        modal:false,
+      loader:false}
     case ORDER_LOADER:
       return{...state,loader:true}
     case SET_ACTIVE_ORDER:

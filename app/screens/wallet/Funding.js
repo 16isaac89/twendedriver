@@ -33,7 +33,7 @@ const FAVORITE_ICON = IOS ? 'ios-heart' : 'md-heart';
 const CLOSE_ICON = IOS ? 'ios-close' : 'md-close';
 // const imgHolder = require('../../assets/img/imgholder.png');
 const RATING_ICON = IOS ? 'ios-star' : 'md-star';
-import { Ionicons } from '@expo/vector-icons'; 
+import { Ionicons } from 'react-native-vector-icons'; 
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 
@@ -41,6 +41,11 @@ import * as actions from '../../redux/actions';
 
 
 class Funding extends Component {
+  componentDidUpdate(prevProps){
+    if ( this.props.active !== prevProps.active ) {
+      this.props.navigation.navigate('Accepted')
+  }
+  }
   getOrders = () =>{
     let id = this.props.user.id;
       this.props.getOrders(id);
@@ -58,7 +63,8 @@ class Funding extends Component {
 
 function mapStateToProps( state ) {
   return { 
-  user:state.auth.user
+  user:state.auth.user,
+  active:state.order.active
   };
 }
 

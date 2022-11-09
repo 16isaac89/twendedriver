@@ -1,0 +1,224 @@
+{
+  "project_info": {
+    "project_number": "628522967135",
+    "project_id": "twende-fbca7",
+    "storage_bucket": "twende-fbca7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:628522967135:android:43b41c75e23f7e1a207bea",
+        "android_client_info": {
+          "package_name": "com.customer.twende"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "628522967135-25anc068aa37d1o7s3mdl69o8jf8sdum.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.customer.twende",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "628522967135-4feh9k3rfpgdf7pomfaugovf13hk72q2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMqNNYle_7v2eJVJfBGrwq5NqmIAihmnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "628522967135-4feh9k3rfpgdf7pomfaugovf13hk72q2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:628522967135:android:225879f63c665bac207bea",
+        "android_client_info": {
+          "package_name": "com.driver.twende"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "628522967135-4feh9k3rfpgdf7pomfaugovf13hk72q2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMqNNYle_7v2eJVJfBGrwq5NqmIAihmnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "628522967135-4feh9k3rfpgdf7pomfaugovf13hk72q2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:628522967135:android:78bb97b78641bcd8207bea",
+        "android_client_info": {
+          "package_name": "com.twende.customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "628522967135-2bmu87utin3a0lm3hblp6t9eu3tmp8gf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.twende.customer",
+            "certificate_hash": "8fe2f13b8ef30d98a61fec25add311917ce57d61"
+          }
+        },
+        {
+          "client_id": "628522967135-j32p1sqhuj6fgpb1d79cbi3kmo2efg6t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.twende.customer",
+            "certificate_hash": "72e537ddec041183ebd89f4158ed6a551fe692db"
+          }
+        },
+        {
+          "client_id": "628522967135-ucto99udrk61akluvg1j8h0cdebpa4vm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.twende.customer",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "628522967135-4feh9k3rfpgdf7pomfaugovf13hk72q2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMqNNYle_7v2eJVJfBGrwq5NqmIAihmnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "628522967135-4feh9k3rfpgdf7pomfaugovf13hk72q2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:628522967135:android:57bc90b3fb5e46e8207bea",
+        "android_client_info": {
+          "package_name": "com.twende.driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "628522967135-4feh9k3rfpgdf7pomfaugovf13hk72q2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMqNNYle_7v2eJVJfBGrwq5NqmIAihmnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "628522967135-4feh9k3rfpgdf7pomfaugovf13hk72q2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:628522967135:android:019668120195e0b1207bea",
+        "android_client_info": {
+          "package_name": "com.twendeconductor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "628522967135-6r8k9rj9jok9l81t2nbvspvjj1glqi01.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.twendeconductor",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "628522967135-4feh9k3rfpgdf7pomfaugovf13hk72q2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMqNNYle_7v2eJVJfBGrwq5NqmIAihmnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "628522967135-4feh9k3rfpgdf7pomfaugovf13hk72q2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:628522967135:android:7c907cb3732b4687207bea",
+        "android_client_info": {
+          "package_name": "com.twendedeliveries.driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "628522967135-4feh9k3rfpgdf7pomfaugovf13hk72q2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMqNNYle_7v2eJVJfBGrwq5NqmIAihmnM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "628522967135-4feh9k3rfpgdf7pomfaugovf13hk72q2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

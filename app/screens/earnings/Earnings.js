@@ -34,7 +34,7 @@ const FAVORITE_ICON = IOS ? 'ios-heart' : 'md-heart';
 const CLOSE_ICON = IOS ? 'ios-close' : 'md-close';
 // const imgHolder = require('../../assets/img/imgholder.png');
 const RATING_ICON = IOS ? 'ios-star' : 'md-star';
-import { Ionicons } from '@expo/vector-icons'; 
+import Ionicons from 'react-native-vector-icons/Ionicons'; 
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 	
@@ -64,7 +64,7 @@ class Earnings extends Component {
    let date = selectedDate.toISOString().split( "T" )[0]
    let hdate = selectedDate.toDateString()
    let driver = this.props.user.id
-   // console.log(selectedDate,hdate,date,driver)
+  console.log(selectedDate,hdate,date,driver)
    this.props.setdate(selectedDate,hdate,date,driver)
   };
 

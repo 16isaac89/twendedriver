@@ -1,98 +1,61 @@
-import React from 'react';
-import { Text, View, TouchableOpacity, Image,Dimensions } from 'react-native';
-import * as Permissions from 'expo-permissions';
-import { Camera } from 'expo-camera';
-import { Entypo } from '@expo/vector-icons'; 
-import { connect } from 'react-redux';
-import * as actions from '../../redux/actions';
+import React, { Component } from 'react';
 
+import {
+  AppRegistry,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Linking
+} from 'react-native';
 
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import { RNCamera } from 'react-native-camera';
 
-let camera; 
-class Ordercomplete extends React.Component {
-    
-  state = {
-    hasCameraPermission: null,
-    type: Camera.Constants.Type.back,
+export default class Ordercomplete extends Component {
+  onSuccess = e => {
+    Linking.openURL(e.data).catch(err =>
+      console.error('An error occured', err)
+    );
   };
 
-  async componentDidMount() {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({ hasCameraPermission: status === 'granted' });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.orderimage !== this.props.orderimage) {
-      this.props.navigation.navigate('Accepted')
-    }
-  }
-
-takePicture=async()=>{
-    if( camera ) {
-      const options = {quality: 0.5};
-      const data = await camera.takePictureAsync(options);
-      let uri = data.uri
-      this.props.ordercompleteimage(uri)
-    }
-  }
-
   render() {
-    const { hasCameraPermission } = this.state;
-    if (hasCameraPermission === null) {
-      return <View />;
-    } else if (hasCameraPermission === false) {
-      return <Text>No access to camera</Text>;
-    } else {
-      return (
-        <View style={{ flex: 1 }}>
-          <Camera style={{ flex: 1 }} type={this.state.type} ref={ref => (camera = ref)}>
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: 'transparent',
-                flexDirection: 'row',
-              }}>
-              <TouchableOpacity
-                style={{
-                  flex: 0.1,
-                  alignSelf: 'flex-end',
-                  alignItems: 'center',
-                }}
-                onPress={() => {
-                  this.setState({
-                    type:
-                      this.state.type === Camera.Constants.Type.back
-                        ? Camera.Constants.Type.front
-                        : Camera.Constants.Type.back,
-                  });
-                }}>
-                <Text style={{ fontSize: 18, marginBottom: 10, color: 'white', }}> Flip </Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.takePicture()} style={{
-                 position: 'absolute',//use absolute position to show button on top of the map
-                 bottom:'15%',
-                  width:Dimensions.get('window').width,
-                 flexDirection:"row",
-                 alignContent:'center',
-                 alignItems:'center',
-                 justifyContent:'center',
-                 borderTopLeftRadius:20,
-                 borderTopRightRadius:20
-              }}> 
-              <Entypo name="camera" size={50} color="orange" />
-              </TouchableOpacity>
-            </View>
-          </Camera>
-        </View>
-      );
-    }
+    return (
+      <QRCodeScanner
+        onRead={this.onSuccess}
+        flashMode={RNCamera.Constants.FlashMode.torch}
+        topContent={
+          <Text style={styles.centerText}>
+            Go to{' '}
+            <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on
+            your computer and scan the QR code.
+          </Text>
+        }
+        bottomContent={
+          <TouchableOpacity style={styles.buttonTouchable}>
+            <Text style={styles.buttonText}>OK. Got it!</Text>
+          </TouchableOpacity>
+        }
+      />
+    );
   }
 }
 
-function mapStateToProps( state ) {
-    return { 
-        orderimage:state.order.orderimage
-    };
+const styles = StyleSheet.create({
+  centerText: {
+    flex: 1,
+    fontSize: 18,
+    padding: 32,
+    color: '#777'
+  },
+  textBold: {
+    fontWeight: '500',
+    color: '#000'
+  },
+  buttonText: {
+    fontSize: 21,
+    color: 'rgb(0,122,255)'
+  },
+  buttonTouchable: {
+    padding: 16
   }
-  
-  export default connect(mapStateToProps, actions)(Ordercomplete);
+});

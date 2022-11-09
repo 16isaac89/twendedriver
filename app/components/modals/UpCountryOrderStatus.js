@@ -4,7 +4,8 @@ import { Alert, Modal, StyleSheet,View,Text,TouchableOpacity,ActivityIndicator} 
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 import SearchableDropdown from 'react-native-searchable-dropdown';
-import { AntDesign,Feather } from '@expo/vector-icons';
+import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign'
 import * as Location from 'expo-location';
 
 

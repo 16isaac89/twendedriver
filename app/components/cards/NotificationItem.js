@@ -9,7 +9,7 @@
 import React from 'react';
 import {I18nManager, StyleSheet, View} from 'react-native';
 
-import Icon from '@expo/vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {SwipeRow} from 'react-native-swipe-list-view';
 
 // import components

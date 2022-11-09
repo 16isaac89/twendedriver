@@ -1,92 +1,84 @@
-import React from 'react';
-import { Container, Spinner, TextH3 } from "./UI";
-import * as Permissions from 'expo-permissions';
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import {window} from "./Layout";
-import { ActivityIndicator,Text,View } from 'react-native-web';
+import React, { Component } from 'react';
+
+import {
+  AppRegistry,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Linking
+} from 'react-native';
+
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import { RNCamera } from 'react-native-camera';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
-import * as Location from 'expo-location';
 
-class Scanner extends React.Component{
-static navigationOptions = {
-header: null
+class Scanner extends Component {
+  componentDidUpdate(prevProps){
+    if ( this.props.active !== prevProps.active ) {
+      this.props.navigation.navigate('Accepted')
+  }
+  }
+  onSuccess = e => {
+    Linking.openURL(e.data).catch(err =>
+      console.error('An error occured', err)
+    );
+  };
+
+  render() {
+    return (
+      <QRCodeScanner
+        onRead={this.onSuccess}
+        flashMode={RNCamera.Constants.FlashMode.torch}
+        topContent={
+          <Text style={styles.centerText}>
+            Go to{' '}
+            <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on
+            your computer and scan the QR code.
+          </Text>
+        }
+        bottomContent={
+          <TouchableOpacity style={styles.buttonTouchable}>
+            <Text style={styles.buttonText}>OK. Got it!</Text>
+          </TouchableOpacity>
+        }
+      />
+    );
+  }
 }
-// Component State
-state = {
-hasCameraPermission: null, // if app has permissions to acess camera
-isScanned: false // scanned
-}
-async componentDidMount() {
-// ask for camera permission
-const { status } = await Permissions.askAsync(Permissions.CAMERA);
-console.log(status);
-this.setState({ hasCameraPermission: status === "granted" ? true : false });
-}
-handleBarCodeScanned = async({ type, data }) => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
-      return;
-    }
-    let location = await Location.getCurrentPositionAsync({});
-    let latitude = location.coords.latitude
-    let longitude = location.coords.longitude
-    let order = data
-    let id = this.props.user.id
-   this.props.upDateOrder(latitude,longitude,order,id)
-}
-render(){
-const { hasCameraPermission, isScanned } = this.state;
-if(hasCameraPermission === null){
-// requesting permission
-return (
-<Spinner />
-);
-}
-if(hasCameraPermission === false){
-//permission denied
-return (
-<Container>
-<TextH3>Please grant Camera permission</TextH3>
-</Container>
-)
-}
-if(hasCameraPermission === true && !isScanned && this.props.navigation.isFocused() ){
-// we have permission and this screen is under focus
-return <Container style = {{
-flex: 1,
-flexDirection: 'column',
-justifyContent: 'center',
-alignItems: 'center'
-}}>
-<TextH3>Scan code inside window</TextH3>
-<BarCodeScanner
-onBarCodeScanned = { isScanned ? undefined : this.handleBarCodeScanned }
-style = {{
-height: window.height / 2,
-width: window.height,
-}}
->
-</BarCodeScanner>
-</Container>
-}
-else{
-return <Spinner />;
-}
-}
-}
+
 
 function mapStateToProps( state ) {
-    return { 
-      token: state.cart.quantity,
-      username:state.auth.username,
-      password:state.auth.password,
-      regloader:state.auth.regloader,
-      isloggedin:state.auth.loggedin,
-      user:state.auth.user,
-      loader:state.order.loader
-    };
+  return { 
+    token: state.cart.quantity,
+    username:state.auth.username,
+    password:state.auth.password,
+    regloader:state.auth.regloader,
+    isloggedin:state.auth.loggedin,
+    user:state.auth.user,
+    loader:state.order.loader,
+    active:state.order.active
+  };
+}
+
+export default connect(mapStateToProps, actions)(Scanner);
+
+const styles = StyleSheet.create({
+  centerText: {
+    flex: 1,
+    fontSize: 18,
+    padding: 32,
+    color: '#777'
+  },
+  textBold: {
+    fontWeight: '500',
+    color: '#000'
+  },
+  buttonText: {
+    fontSize: 21,
+    color: 'rgb(0,122,255)'
+  },
+  buttonTouchable: {
+    padding: 16
   }
-  
-  export default connect(mapStateToProps, actions)(Scanner);
+});

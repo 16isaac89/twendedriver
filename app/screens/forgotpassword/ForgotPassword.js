@@ -8,7 +8,7 @@
 // import dependencies
 import React, {Component} from 'react';
 import {Keyboard, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
-import Icon from '@expo/vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // import components
 import ActivityIndicatorModal from '../../components/modals/ActivityIndicatorModal';
@@ -189,6 +189,7 @@ export default class ForgotPassword extends Component {
                 inputStyle={styles.inputStyle}
               />
             </View>
+
 
             <View style={styles.buttonContainer}>
               <Button

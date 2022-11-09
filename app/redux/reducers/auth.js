@@ -56,16 +56,16 @@ export default function(state = INITIAL_STATE, action) {
     case LOGIN_OUT:
       return{...state,loggedin:false}
     case GET_LOCATION:
-      return{...state,latitude:action.payload.latitude,longitude:action.payload.longitude,speed:action.payload.speed, coordinate:{
-        latitude:action.payload.latitude,
-        longitude:action.payload.longitude,
+      return{...state,latitude:action.payload.coords.latitude,longitude:action.payload.coords.longitude,speed:action.payload.speed, coordinate:{
+        latitude:action.payload.coords.latitude,
+        longitude:action.payload.coords.longitude,
       }}
     case SHOW_DATE_PICKER:
       return{...state,datepicker:true}
     case HIDE_DATE_PICKER:
       return{...state,datepicker:false}
     case SET_DATE:
-      return{...state,selectdate:action.payload.date,hdate:action.payload.hdate,datepicker:false,
+      return{...state,selectdate:action.payload.selectedDate,hdate:action.payload.hdate,datepicker:false,
         regloader:false,dateorders:action.payload.orders,driverpercent:action.payload.percentage}
     case SET_INTERNET_STATE:
       return{...state,internetstate:action.payload,internetstatemodal:action.payload === true ? false : true}

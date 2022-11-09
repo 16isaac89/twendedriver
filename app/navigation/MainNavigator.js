@@ -87,11 +87,13 @@ import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
 import Ordercomplete from '../screens/camera/Ordercomplete'
 // MainNavigatorA
+import { navigationRef } from './RootNavigation.js';
 
 
 
 
 class MainNavigatorA extends Component {
+ 
   // shouldComponentUpdate(nextProps) {
   //   if (nextProps.value !== this.props.order) {
   //     this.props.openModal()
@@ -121,6 +123,8 @@ class MainNavigatorA extends Component {
           },
           headerTintColor: Colors.onBackground,
           headerTitleAlign: 'center',
+          animationTypeForReplace: 'pop',
+          
         }}>
        
        { this.props.isloggedin == false ? (
@@ -197,7 +201,7 @@ class MainNavigatorA extends Component {
 <Stack.Screen
           name="Camera"
           component={Camera}
-          options={{headerShown: false}}
+          options={{headerShown: true,title:"Order scanner."}}
         />
         
         

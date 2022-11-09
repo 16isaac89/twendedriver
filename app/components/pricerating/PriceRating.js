@@ -8,7 +8,7 @@
 // import dependencies
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import Icon from '@expo/vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import type { ColorProp } from 'react-native/Libraries/StyleSheet/ColorPropType';
 
 // import colors

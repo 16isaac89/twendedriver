@@ -16,12 +16,9 @@ import {
 } from '../actions/types';
 import axios from "axios"
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Location from 'expo-location';
-import * as TaskManager from 'expo-task-manager';
 import {commonurl} from '../../utils/utilities'
 import { NavigationActions } from '@react-navigation/native';
 
-const LOCATION_TASK_NAME = 'background-location-task';
 
 const ROOT_URL = commonurl;
 
@@ -59,9 +56,8 @@ export const loginuser = (username,password) =>{
                 })
                     .then( async(response)  => {
                         let user = response.data.driver
-                        console.log("user data")
-                        console.log(user)
-                        await AsyncStorage.setItem('userdata', JSON.stringify(user))
+                       
+                        await AsyncStorage.setItem('driverdata', JSON.stringify(user))
                         dispatch({type:LOGIN_SUCCESS,payload:user})
                     })
                     .catch(function (error) {
@@ -75,16 +71,21 @@ export const loginuser = (username,password) =>{
 
 export const logout = () =>{
     return async(dispatch)=>{
-        AsyncStorage.removeItem('userdata');
+        AsyncStorage.removeItem('driverdata');
 dispatch({type:LOGIN_OUT})
     }
 }
 
 export const checklogin = () =>{
     return async(dispatch)=>{
-       let userdata = await AsyncStorage.getItem('userdata');
-       let user = JSON.parse(userdata)
-       dispatch({type:LOGIN_SUCCESS,payload:user})
+       let userdata = await AsyncStorage.getItem('driverdata');
+       if(userdata){
+        let user = JSON.parse(userdata)
+        dispatch({type:LOGIN_SUCCESS,payload:user})
+       }else{
+        dispatch({type:LOGIN_FAIL})
+       }
+       
     }
 }
 // axios.get('/GeeksforGeeks', {
@@ -167,7 +168,6 @@ dispatch({type:SHOW_DATE_PICKER})
 }
 
 export const setinternetstate = (state) =>{
-   
     return(dispatch)=>{
 dispatch({type:SET_INTERNET_STATE,payload:state})
     }
@@ -198,6 +198,9 @@ export const setdate = (selectedDate,hdate,date,driver) =>{
         
     }
 }
+
+
+
 
 
 

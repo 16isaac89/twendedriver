@@ -27,7 +27,7 @@ import UnderlineTextInput from '../../components/textinputs/UnderlineTextInput';
 // import colors, layout
 import Colors from '../../theme/colors';
 import Layout from '../../theme/layout';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // SignIn Config
 const PLACEHOLDER_TEXT_COLOR = Colors.onPrimaryColor;
 const INPUT_TEXT_COLOR = Colors.onPrimaryColor;
@@ -42,7 +42,9 @@ import * as actions from '../../redux/actions';
 
 // SignIn
 class SignIn extends Component {
- 
+ async componentDidMount(){
+  console.log(await AsyncStorage.getItem('driverdata'))
+ }
   constructor(props) {
     super(props);
     this.state = {
@@ -165,6 +167,7 @@ showButton = () =>{
                 focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
                 inputContainerStyle={styles.inputContainer}
                 value={this.props.username}
+                keyboardType={'phone-pad'}
               />
 
               <UnderlinePasswordInput

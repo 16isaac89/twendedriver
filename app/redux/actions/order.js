@@ -36,14 +36,14 @@ import {
  import {commonurl} from '../../utils/utilities'
  import AsyncStorage from '@react-native-async-storage/async-storage';
 
- import * as Localization from 'expo-localization';
- import * as Location from 'expo-location';
 import moment from 'moment-timezone'
-import { Audio } from 'expo-av';
+
 import Pusher from 'pusher-js/react-native';
 import Echo from 'laravel-echo';
+import Sound from 'react-native-sound'
+import RootNavigation from '../../navigation/RootNavigation'
+Sound.setCategory('Playback');
 
- const LOCATION_TASK_NAME = 'background-location-task';
 
 
  const ROOT_URL = commonurl;
@@ -70,19 +70,24 @@ import Echo from 'laravel-echo';
  
  export const orderNotification = (notifications) =>{
     return async(dispatch)=>{
-      await Audio.setAudioModeAsync({
-         staysActiveInBackground: true,
-        
-         shouldDuckAndroid: true,
-         playThroughEarpieceAndroid: true,
-         allowsRecordingIOS: true,
+      var sound = new Sound('notification.mp3', Sound.MAIN_BUNDLE, (error) => {
+         if (error) {
+           console.log('failed to load the sound', error);
+           return;
+         }
+         // loaded successfully
+         console.log('duration in seconds: ' + sound.getDuration() + 'number of channels: ' + sound.getNumberOfChannels());
+       
+         // Play the sound with an onEnd callback
+         sound.play((success) => {
+           if (success) {
+             console.log('successfully finished playing');
+           } else {
+             console.log('playback failed due to audio decoding errors');
+           }
+         });
        });
-      const { sound } = await Audio.Sound.createAsync(
-         require('../../../assets/order.wav'),
-         { shouldPlay: true, staysActiveInBackground: true }
-         
-      );
-      await sound.playAsync();
+       sound.setNumberOfLoops(-1);
         dispatch({type:SET_NOTIFICATION_ORDER,payload:{notifications,sound}});
         
     }
@@ -197,7 +202,7 @@ export const stopSound = async(sound)=> {
     }
  }
 
- export const setActiveOrder = (item,accept,navigation,driver) =>{
+ export const setActiveOrder = (item,accept,driver) =>{
     return async(dispatch)=>{
       dispatch({type:MODAL_ON})
       let id = item.id
@@ -207,14 +212,15 @@ export const stopSound = async(sound)=> {
          driver:driver
       })
           .then( async(response)  => {
-            if(accept === 1){
+            // if(accept === 1){
             await AsyncStorage.setItem('activeorder', JSON.stringify(item))
             dispatch({type:SET_ACTIVE_ORDER,payload:item})
-            navigation.navigate("Accepted");
-            }else{
-               await AsyncStorage.removeItem('activeorder')
-               dispatch({type:MODAL_OFF})
-            }
+            RootNavigation.navigate('Accepted')
+            //navigation.navigate("Accepted");
+            // }else{
+            //    await AsyncStorage.removeItem('activeorder')
+            //    dispatch({type:MODAL_OFF})
+            // }
           })
           .catch(function async(error) {
             AsyncStorage.removeItem('activeorder')
@@ -236,49 +242,49 @@ export const stopSound = async(sound)=> {
  export const sendOtp=(id,otp)=>{
     return async(dispatch)=>{
         
-        let address = ""
+      //   let address = ""
      
-        const  {timezone}  = await Localization.getLocalizationAsync();
-       let { status } = await Location.requestForegroundPermissionsAsync();
-         if (status !== 'granted') {
-           setErrorMsg('Permission to access location was denied');
-           return;
-         }
-         let location = await Location.getCurrentPositionAsync({});
-          let time = await moment().tz(timezone).format('YYYY-MM-DD HH:mm:ss');
-          const { latitude, longitude } = location.coords ;
-       let response = await Location.reverseGeocodeAsync({
-         latitude,
-         longitude
-       });
-       for (let item of response) {
-          address = `${item.name}, ${item.street}, ${item.city}`;
-       }
-        axios.post(ROOT_URL+"/order/check/otp", {
-            id:id,
-            status:'started',
-            otp:otp,
-            address:address,
-            startlat:latitude,
-            startlongitude:longitude,
-            time:time
-         })
-             .then( async(response)  => {
-                let status = response.data.status
-                if(status === 1){
-                    let order = response.data.order
-                    let status = response.data.order.status
-                    await AsyncStorage.setItem('activeorder', JSON.stringify(order))
-                     dispatch({type:OTP_SENT,payload:status})
-                }else{
-                    alert('Wrong otp please try again')
-                }
+      //   const  {timezone}  = await Localization.getLocalizationAsync();
+      //  let { status } = await Location.requestForegroundPermissionsAsync();
+      //    if (status !== 'granted') {
+      //      setErrorMsg('Permission to access location was denied');
+      //      return;
+      //    }
+      //    let location = await Location.getCurrentPositionAsync({});
+      //     let time = await moment().tz(timezone).format('YYYY-MM-DD HH:mm:ss');
+      //     const { latitude, longitude } = location.coords ;
+      //  let response = await Location.reverseGeocodeAsync({
+      //    latitude,
+      //    longitude
+      //  });
+      //  for (let item of response) {
+      //     address = `${item.name}, ${item.street}, ${item.city}`;
+      //  }
+      //   axios.post(ROOT_URL+"/order/check/otp", {
+      //       id:id,
+      //       status:'started',
+      //       otp:otp,
+      //       address:address,
+      //       startlat:latitude,
+      //       startlongitude:longitude,
+      //       time:time
+      //    })
+      //        .then( async(response)  => {
+      //           let status = response.data.status
+      //           if(status === 1){
+      //               let order = response.data.order
+      //               let status = response.data.order.status
+      //               await AsyncStorage.setItem('activeorder', JSON.stringify(order))
+      //                dispatch({type:OTP_SENT,payload:status})
+      //           }else{
+      //               alert('Wrong otp please try again')
+      //           }
                
-             })
-             .catch(function (error) {
-                dispatch({type:SEND_FAILED})
-                 console.log(error.response)
-             })
+      //        })
+      //        .catch(function (error) {
+      //           dispatch({type:SEND_FAILED})
+      //            console.log(error.response)
+      //        })
     }
  }
 
@@ -371,50 +377,50 @@ export const stopSound = async(sound)=> {
 
  export const orderCompleted =(id,driver,navigation)=>{
     return async(dispatch)=>{
-      dispatch({type:SENDING_ORDER})
-        let address = ""
+      // dispatch({type:SENDING_ORDER})
+      //   let address = ""
      
-        const  {timezone}  = await Localization.getLocalizationAsync();
-       let { status } = await Location.requestForegroundPermissionsAsync();
-         if (status !== 'granted') {
-           setErrorMsg('Permission to access location was denied');
-           return;
-         }
-         let location = await Location.getCurrentPositionAsync({});
-          let time = await moment().tz(timezone).format('YYYY-MM-DD HH:mm:ss');
-          const { latitude, longitude } = location.coords ;
-       let response = await Location.reverseGeocodeAsync({
-         latitude,
-         longitude
-       });
-       for (let item of response) {
-          address = `${item.name}, ${item.street}, ${item.city}`;
-       }
-        axios.post(ROOT_URL+"/order/complete", {
-            id:id,
-            address:address,
-            endlat:latitude,
-            endlongitude:longitude,
-            time:time,
-            driver:driver
-         })
-             .then( async(response)  => {
-               let orders = response.data.orders
-               let cancelled = response.data.cancelled
-               let completed = response.data.completed
-                //dispatch({type:GET_ORDERS,payload:{orders,cancelled,completed}})
-                let status = response.data.order.status
-                let income = response.data.income
-                console.log(completed)
-                await AsyncStorage.removeItem('activeorder');
-                alert('Order has been completed')
-                 dispatch({type:ORDER_COMPLETED,payload:{status,income,orders,cancelled,completed}})
-                 navigation.navigate('TopBar')
-             })
-             .catch(function (error) {
-                dispatch({type:SEND_FAILED})
-                 console.log(error.response)
-             })
+      //   const  {timezone}  = await Localization.getLocalizationAsync();
+      //  let { status } = await Location.requestForegroundPermissionsAsync();
+      //    if (status !== 'granted') {
+      //      setErrorMsg('Permission to access location was denied');
+      //      return;
+      //    }
+      //    let location = await Location.getCurrentPositionAsync({});
+      //     let time = await moment().tz(timezone).format('YYYY-MM-DD HH:mm:ss');
+      //     const { latitude, longitude } = location.coords ;
+      //  let response = await Location.reverseGeocodeAsync({
+      //    latitude,
+      //    longitude
+      //  });
+      //  for (let item of response) {
+      //     address = `${item.name}, ${item.street}, ${item.city}`;
+      //  }
+      //   axios.post(ROOT_URL+"/order/complete", {
+      //       id:id,
+      //       address:address,
+      //       endlat:latitude,
+      //       endlongitude:longitude,
+      //       time:time,
+      //       driver:driver
+      //    })
+      //        .then( async(response)  => {
+      //          let orders = response.data.orders
+      //          let cancelled = response.data.cancelled
+      //          let completed = response.data.completed
+      //           //dispatch({type:GET_ORDERS,payload:{orders,cancelled,completed}})
+      //           let status = response.data.order.status
+      //           let income = response.data.income
+      //           console.log(completed)
+      //           await AsyncStorage.removeItem('activeorder');
+      //           alert('Order has been completed')
+      //            dispatch({type:ORDER_COMPLETED,payload:{status,income,orders,cancelled,completed}})
+      //            navigation.navigate('TopBar')
+      //        })
+      //        .catch(function (error) {
+      //           dispatch({type:SEND_FAILED})
+      //            console.log(error.response)
+      //        })
     }
  }
 

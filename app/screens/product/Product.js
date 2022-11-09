@@ -27,7 +27,7 @@ import Button from '../../components/buttons/Button';
 import {Caption, Heading5, SmallText} from '../../components/text/CustomText';
 import Icon from '../../components/icon/Icon';
 import TouchableItem from '../../components/TouchableItem';
-import { Ionicons } from '@expo/vector-icons'; 
+import { Ionicons } from 'react-native-vector-icons'; 
 // import colors
 import Colors from '../../theme/colors';
 
@@ -47,8 +47,8 @@ const CLOSE_ICON = IOS ? 'ios-close' : 'md-close';
 const RATING_ICON = IOS ? 'ios-star' : 'md-star';
 import styles from './styles'
 import Divider from '../../components/divider/Divider';
-import { MaterialIcons,Entypo,MaterialCommunityIcons,FontAwesome5 } from '@expo/vector-icons';
-import * as Linking from 'expo-linking';
+import { MaterialIcons,Entypo,MaterialCommunityIcons,FontAwesome5 } from 'react-native-vector-icons';
+
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CompleteOrder from '../../components/modals/CompleteOrder.js';
 // Product
@@ -62,29 +62,29 @@ class Product extends Component {
     console.log("this.props.route.params.item")
     console.log(this.props.route.params.item)
   }
-  opendest = () =>{
-    let dest = this.props.route.params.item.to
-    var url = "https://www.google.com/maps/dir/?api=1&travelmode=driving&dir_action=navigate&destination="+dest;
-Linking.canOpenURL(url).then(supported => {
-    if (!supported) {
-        console.log('Can\'t handle url: ' + url);
-    } else {
-        return Linking.openURL(url);
-    }
-}).catch(err => console.error('An error occurred', err)); 
-  }
+//   opendest = () =>{
+//     let dest = this.props.route.params.item.to
+//     var url = "https://www.google.com/maps/dir/?api=1&travelmode=driving&dir_action=navigate&destination="+dest;
+// Linking.canOpenURL(url).then(supported => {
+//     if (!supported) {
+//         console.log('Can\'t handle url: ' + url);
+//     } else {
+//         return Linking.openURL(url);
+//     }
+// }).catch(err => console.error('An error occurred', err)); 
+//   }
 
-  openorigin = () =>{
-    let origin = this.props.route.params.item.from
-    var url = "https://www.google.com/maps/dir/?api=1&travelmode=driving&dir_action=navigate&destination="+origin;
-Linking.canOpenURL(url).then(supported => {
-    if (!supported) {
-        console.log('Can\'t handle url: ' + url);
-    } else {
-        return Linking.openURL(url);
-    }
-}).catch(err => console.error('An error occurred', err)); 
-  }
+//   openorigin = () =>{
+//     let origin = this.props.route.params.item.from
+//     var url = "https://www.google.com/maps/dir/?api=1&travelmode=driving&dir_action=navigate&destination="+origin;
+// Linking.canOpenURL(url).then(supported => {
+//     if (!supported) {
+//         console.log('Can\'t handle url: ' + url);
+//     } else {
+//         return Linking.openURL(url);
+//     }
+// }).catch(err => console.error('An error occurred', err)); 
+//   }
  
   completeorder = () =>{
     if(this.props.route.params.item.status === 'completed'){

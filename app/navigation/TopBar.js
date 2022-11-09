@@ -18,7 +18,7 @@ import OrderItem from '../components/cards/OrderItem';
 import {Caption, Subtitle1, Subtitle2,SmallText,Heading5} from '../components/text/CustomText';
 // import colors
 import Colors from '../theme/colors';
-
+import ActivityIndicatorModal from '../components/modals/ActivityIndicatorModal';
 // import components
 import Button from '../components/buttons/Button';
 
@@ -35,7 +35,7 @@ const FAVORITE_ICON = IOS ? 'ios-heart' : 'md-heart';
 const CLOSE_ICON = IOS ? 'ios-close' : 'md-close';
 // const imgHolder = require('../../assets/img/imgholder.png');
 const RATING_ICON = IOS ? 'ios-star' : 'md-star';
-import { Ionicons } from '@expo/vector-icons'; 
+import Ionicons  from 'react-native-vector-icons/Ionicons'; 
 import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
 
@@ -56,6 +56,13 @@ class TopBar extends Component {
   render(){
   return (
  <View style={{flex:1,flexDirection:'column'}}>
+   <ActivityIndicatorModal
+              statusBarColor={Colors.primaryColor }
+              message="Please wait . . ."
+              onRequestClose={this.closeModal}
+              title="Getting Orders"
+              visible={this.props.modal}
+            />
    <View style={styles.header}>
               <View style={[styles.topButton, styles.left]}>
                 <TouchableItem onPress={()=>this.props.navigation.navigate('Town')} borderless>
@@ -94,7 +101,8 @@ class TopBar extends Component {
 
 function mapStateToProps( state ) {
   return { 
-  user:state.auth.user
+  user:state.auth.user,
+  modal:state.order.loader
   };
 }
 

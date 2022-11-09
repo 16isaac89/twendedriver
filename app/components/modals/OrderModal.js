@@ -3,16 +3,16 @@ import { Alert, Modal, StyleSheet, Text, Pressable, View,TouchableOpacity,Image 
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Oct from 'react-native-vector-icons/Entypo';
-
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
-import { Audio } from 'expo-av';
+
+
 
 class OrderModal extends Component {
+
   stopSound = async() =>{
      let sound = this.props.sound
-     await sound.stopAsync()
-    await sound.unloadAsync()
+     await sound.stop()
    // this.props.stopSound(sound)
   }
 
@@ -20,18 +20,19 @@ class OrderModal extends Component {
     this.stopSound()
     let order = this.props.order
     let accept = 1
-    let navigation = this.props.navigation
     let driver = this.props.user.id
-    await this.props.setActiveOrder(order,accept,navigation,driver)
+    await this.props.setActiveOrder(order,accept,driver)
     
   }
   denyOrder = async()=>{
+    RootNavigation.navigate('Accepted')
     this.stopSound()
-    let order = this.props.order
-    let accept = 0
-    let navigation = this.props.navigation
-    let driver = this.props.user.id
-    await this.props.setActiveOrder(order,accept,navigation,driver)
+    this.props.modalTimeOut()
+    // let order = this.props.order
+    // let accept = 0
+    // let navigation = this.props.navigation
+    // let driver = this.props.user.id
+    // await this.props.setActiveOrder(order,accept,navigation,driver)
   }
   state = {
     modalVisible: false
@@ -64,17 +65,17 @@ class OrderModal extends Component {
             <View style={{  flexDirection: 'column', justifyContent: 'center', alignItems: 'center',marginBottom:10  }}>
             <Text style={styles.textStyle2}>Estimated Fare</Text>
         <Text style={styles.textStyle}>UGX {this.props.order.money}</Text>
-        <Text style={styles.textStyle2}>Cash Payment</Text>
+        <Text style={styles.textStyle2}>Wallet</Text>
         </View>
 
             <View style={{  flexDirection: 'row', justifyContent: 'center', alignItems: 'center',marginBottom:10 }}>
-            <Text style={styles.textStyle2}>{this.props.order.distance}KM</Text>
-        <Text style={styles.textStyle2}>0Min</Text>
+            <Text style={styles.textStyle2}>{this.props.order.distance} KM</Text>
+        <Text style={styles.textStyle2}>0 Min</Text>
         </View>
 
             <CountdownCircleTimer
             isPlaying
-            duration={20}
+            duration={200}
             colors={['#004777', '#F7B801', '#A30000', '#A30000']}
             colorsTime={[7, 5, 2, 0]}
 
@@ -126,7 +127,8 @@ function mapStateToProps( state ) {
     ordermodal:state.order.notmodal,
     order:state.order.order,
     sound:state.order.sound,
-    user:state.auth.user
+    user:state.auth.user,
+    active:state.order.active
   };
 }
 

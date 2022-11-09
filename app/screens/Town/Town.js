@@ -3,18 +3,56 @@ import React, {Component, Fragment} from 'react';
 
 
 import Colors from '../../theme/colors';
-import MapView, {ProviderPropType, Marker, AnimatedRegion, MarkerAnimated }from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions,TouchableOpacity,Animated,Image } from 'react-native';
+import MapView, {Marker}from 'react-native-maps';
+import { StyleSheet, Text, View, Dimensions,TouchableOpacity,Animated,Image,PermissionsAndroid,Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import Modal from '../../components/modals/Modal';
-import { FontAwesome } from '@expo/vector-icons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 import ActivityIndicatorModal from '../../components/modals/ActivityIndicatorModal';
-import { MaterialIcons } from '@expo/vector-icons'; 
+import Geolocation from 'react-native-geolocation-service';
 
 class Town extends Component {
+  componentDidUpdate(prevProps){
+    if ( this.props.active !== prevProps.active ) {
+      this.props.navigation.navigate('Accepted')
+  }
+  }
+  starttrack = () =>{
+    if (Platform.OS === 'android') {
+      PermissionsAndroid.requestMultiple(
+        [
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+        PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION
+        ]
+        ).then((result) => {
+          if (result['android.permission.ACCESS_COARSE_LOCATION']
+          && result['android.permission.ACCESS_BACKGROUND_LOCATION']
+          && result['android.permission.ACCESS_FINE_LOCATION'] === 'granted') {
+            Geolocation.watchPosition(
+              (position) => {
+                console.log("position");
+                console.log(position.coords.latitude);
+                this.props.updateLocation(position)
+                
+              },
+              (error) => {
+                console.log(error);
+              },
+              { enableHighAccuracy: true, distanceFilter: 100,maximumAge: 0, fastestInterval: 2000,showsBackgroundLocationIndicator:true }
+            );
+          } else if (result['android.permission.ACCESS_COARSE_LOCATION']
+          || result['android.permission.ACCESS_FINE_LOCATION']
+          || result['android.permission.ACCESS_BACKGROUND_LOCATION'] === 'never_ask_again') {
+            alert('Please Go into Settings -> Applications -> APP_NAME -> Permissions and Allow permissions to continue');
+          }
+        });
+    }
+  }
   
   UNSAFE_componentWillReceiveProps(nextProps) {
     const duration = 500
@@ -43,6 +81,8 @@ class Town extends Component {
         
           <Modal />
         <MapView style={styles.map}
+                showsUserLocation={true}
+                followsUserLocation={true}
         region={{
           latitude: this.props.latitude,
           longitude: this.props.longitude,
@@ -80,6 +120,26 @@ class Town extends Component {
   />
 </TouchableOpacity> 
 </View>
+
+
+<View
+        style={{
+            position: 'absolute',//use absolute position to show button on top of the map
+            bottom: '23%', //for center align
+            right:'6%',
+            alignSelf: 'flex-start' //for align to right
+        }}
+    >
+<TouchableOpacity onPress={()=> this.starttrack()} style={styles.menubtn}>
+<MaterialIcons
+    name="gps-fixed"
+    backgroundColor="#3b5998"
+    size={40}
+  />
+</TouchableOpacity> 
+</View>
+
+
 
 <View
         style={{
@@ -160,7 +220,8 @@ function mapStateToProps( state ) {
    speed:state.auth.speed,
    active:state.order.active,
    earning:state.order.earning,
-   coordinate:state.auth.coordinate
+   coordinate:state.auth.coordinate,
+   active:state.order.active
   };
 }
 

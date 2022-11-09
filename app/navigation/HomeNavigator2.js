@@ -8,7 +8,7 @@
 // import dependencies
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from '@expo/vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // import components
 import TabBadgeIcon from '../components/navigation/TabBadgeIcon';

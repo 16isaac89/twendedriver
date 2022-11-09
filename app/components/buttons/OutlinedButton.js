@@ -8,8 +8,8 @@
 // import dependencies
 import React from 'react';
 import {StyleSheet, View, ViewStyle} from 'react-native';
-import Icon from '@expo/vector-icons/Ionicons';
-import FAIcon from '@expo/vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Ionicons';
+import FAIcon from 'react-native-vector-icons/FontAwesome';
 
 // import components
 import {ButtonText} from '../text/CustomText';
