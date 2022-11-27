@@ -22,6 +22,8 @@ import Icon from '../../components/icon/Icon';
 import {Subtitle2} from '../../components/text/CustomText';
 import TouchableItem from '../../components/TouchableItem';
 import UnderlineTextInput from '../../components/textinputs/UnderlineTextInput';
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
 
 // import colors
 import Colors from '../../theme/colors';
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
 });
 
 // EditProfile
-export default class EditProfile extends Component {
+class EditProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -201,6 +203,7 @@ export default class EditProfile extends Component {
               returnKeyType="next"
               focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
               inputContainerStyle={styles.inputContainerStyle}
+              placeholder={this.props.user.fullname}
             />
 
             <Subtitle2 style={styles.overline}>E-mail Address</Subtitle2>
@@ -217,6 +220,7 @@ export default class EditProfile extends Component {
               keyboardType="email-address"
               focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
               inputContainerStyle={styles.inputContainerStyle}
+              placeholder={this.props.user.email}
             />
 
             <Subtitle2 style={styles.overline}>Phone Number</Subtitle2>
@@ -231,6 +235,7 @@ export default class EditProfile extends Component {
               inputFocused={phoneFocused}
               focusedBorderColor={INPUT_FOCUSED_BORDER_COLOR}
               inputContainerStyle={styles.inputContainerStyle}
+              placeholder={this.props.user.phone_1}
             />
           </View>
         </KeyboardAwareScrollView>
@@ -238,3 +243,11 @@ export default class EditProfile extends Component {
     );
   }
 }
+
+function mapStateToProps( state ) {
+  return { 
+    user:state.auth.user
+  };
+}
+
+export default connect(mapStateToProps, actions)(EditProfile);

@@ -11,12 +11,19 @@ import {
    SHOW_DATE_PICKER,
    HIDE_DATE_PICKER,
    SET_DATE,
-   SET_INTERNET_STATE
+   SET_INTERNET_STATE,
+   FOLLOW_DRIVER,
+   PHONE_NUMBER_CHANGED,
+   FULL_NAME_CHANGED,
+   EMAIL_CHANGED
 } from '../actions/types';
 
 const INITIAL_STATE = {
   username:'',
   password:'',
+  phone:'',
+  fullname:'',
+  email:'',
   customermodal:false,
   regloader:false,
   user:"",
@@ -34,7 +41,11 @@ const INITIAL_STATE = {
   dateorders:[],
   driverpercent:0,
   internetstate:false,
-  internetstatemodal:false
+  internetstatemodal:false,
+
+  routeCoordinates: [],
+  distanceTravelled: 0,
+  valueprevLatLng: {}
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -69,6 +80,21 @@ export default function(state = INITIAL_STATE, action) {
         regloader:false,dateorders:action.payload.orders,driverpercent:action.payload.percentage}
     case SET_INTERNET_STATE:
       return{...state,internetstate:action.payload,internetstatemodal:action.payload === true ? false : true}
+    case FOLLOW_DRIVER:
+      return{
+        ...state,
+        latitude:action.payload.latitude,
+        longitude:action.payload.longitude,
+        routeCoordinates: action.payload.routeCoordinates,
+        distanceTravelled: action.payload.distanceTravelled,
+        valueprevLatLng: action.payload.prevLatLng
+      }
+    case PHONE_NUMBER_CHANGED:
+    return{...state,phone:action.payload}
+    case FULL_NAME_CHANGED:
+      return{...state,fullname:action.payload}
+    case EMAIL_CHANGED:
+      return{...state,email:action.payload}
     default:
       return state;
   }

@@ -26,7 +26,8 @@ import Divider from '../../components/divider/Divider';
 import Icon from '../../components/icon/Icon';
 import {Heading6, Subtitle1, Subtitle2} from '../../components/text/CustomText';
 import TouchableItem from '../../components/TouchableItem';
-
+import { connect } from 'react-redux';
+import * as actions from '../../redux/actions';
 // import colors
 import Colors from '../../theme/colors';
 
@@ -161,7 +162,7 @@ const Setting = ({icon, title, onPress, extraData}: Props) => (
 );
 
 // Settings
-export default class Settings extends Component {
+class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -216,9 +217,9 @@ export default class Settings extends Component {
                   size={80}
                 />
                 <View style={styles.profileCenter}>
-                  <Subtitle1 style={styles.name}>John Doe</Subtitle1>
+                  <Subtitle1 style={styles.name}>{this.props.user.fullname}</Subtitle1>
                   <Subtitle2 style={styles.email}>
-                  john.doe@example.com
+                  {this.props.user.phone_1}
                   </Subtitle2>
                 </View>
               </View>
@@ -227,7 +228,7 @@ export default class Settings extends Component {
 
           <Divider />
 
-          <TouchableItem onPress={this.navigateTo('Notifications')}>
+          {/* <TouchableItem onPress={this.navigateTo('Notifications')}>
             <View style={[styles.row, styles.setting]}>
               <View style={styles.leftSide}>
                 <View style={styles.iconContainer}>
@@ -246,13 +247,13 @@ export default class Settings extends Component {
                   )}
                 </View>
                 <Subtitle1 style={styles.mediumText}>Notifications</Subtitle1>
-              </View>
+              </View> */}
 
               {/*
                 FIX: when android:supportsRtl="true" not added to AndroidManifest.xml
                 <View style={isRTL && {transform: [{scaleX: -1}]}}> 
               */}
-              <View>
+              {/* <View>
                 <Switch
                   trackColor={{
                     true: IOS && Colors.primaryColor,
@@ -264,63 +265,11 @@ export default class Settings extends Component {
               </View>
             </View>
           </TouchableItem>
-          <Divider type="inset" marginLeft={DIVIDER_MARGIN_LEFT} />
+          <Divider type="inset" marginLeft={DIVIDER_MARGIN_LEFT} /> */}
 
 
-          <Setting
-            onPress={this.navigateTo('DeliveryAddress')}
-            icon={ADDRESS_ICON}
-            title="Delivery Address"
-            extraData={
-              <View>
-                <Subtitle2 style={styles.extraData}>
-                566  Olen Thomas Drive
-                </Subtitle2>
-                <Subtitle2 style={styles.extraData}>
-                Dallas TX, USA
-                </Subtitle2>
-              </View>
-            }
-          />
-          <Divider type="inset" marginLeft={DIVIDER_MARGIN_LEFT} />
 
-          <Setting
-            onPress={this.navigateTo('PaymentMethod')}
-            icon={PAYMENT_ICON}
-            title="Payment Method"
-            extraData={
-              <View>
-                <Subtitle2 style={styles.extraData}>Visa MasterCard</Subtitle2>
-                <Subtitle2 style={styles.extraData}>
-                  xxxx xxxx xxxx 7654
-                </Subtitle2>
-              </View>
-            }
-          />
-          <Divider type="inset" marginLeft={DIVIDER_MARGIN_LEFT} />
-
-          <Setting
-            onPress={this.navigateTo('Orders')}
-            icon={ORDERS_ICON}
-            title="My Orders"
-          />
-          <Divider type="inset" marginLeft={DIVIDER_MARGIN_LEFT} />
-
-          <Setting
-            onPress={this.navigateTo('TermsConditions')}
-            icon={TERMS_ICON}
-            title="Terms and Conditions"
-          />
-          <Divider type="inset" marginLeft={DIVIDER_MARGIN_LEFT} />
-
-          <Setting
-            onPress={this.navigateTo('AboutUs')}
-            icon={ABOUT_ICON}
-            title="About Us"
-          />
-          <Divider type="inset" marginLeft={DIVIDER_MARGIN_LEFT} />
-
-          <TouchableItem onPress={this.logout}>
+          <TouchableItem onPress={()=>this.props.logout()}>
             <View style={[styles.row, styles.setting]}>
               <View style={styles.leftSide}>
                 <View style={styles.iconContainer}>
@@ -341,3 +290,12 @@ export default class Settings extends Component {
     );
   }
 }
+
+
+function mapStateToProps( state ) {
+  return { 
+    user:state.auth.user
+  };
+}
+
+export default connect(mapStateToProps, actions)(Settings);

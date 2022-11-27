@@ -54,4 +54,13 @@ export const CLOSE_UPCOUNTRY_MODAL = 'close_upcountry_modal'
 export const SET_SCANNED = 'set_scanned'
 export const SET_INTERNET_STATE = 'set_internet_state'
 export const SENDING_ORDER = 'sending_order'
+export const SEND_STATUS = 'send_status'
+export const FOLLOW_DRIVER = 'follow_driver'
+
+export const FULL_NAME_CHANGED = "full_name_changed"
+export const EMAIL_CHANGED = 'email_changed'
+export const PHONE_NUMBER_CHANGED = 'phone_number_changed'
+export const OLD_PASSWORD_CHANGED = 'old_password_changed'
+export const NEW_PASSWORD_CHANGED = 'new_password_changed'
+export const CONFIRM_PASSWORD_CHANGED = 'confirm_password_changed'
 

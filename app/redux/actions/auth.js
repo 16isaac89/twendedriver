@@ -12,7 +12,15 @@ import {
    SHOW_DATE_PICKER,
    HIDE_DATE_PICKER,
    SET_DATE,
-   SET_INTERNET_STATE
+   SET_INTERNET_STATE,
+   FOLLOW_DRIVER,
+   PHONE_NUMBER_CHANGED,
+   FULL_NAME_CHANGED,
+   EMAIL_CHANGED,
+   OLD_PASSWORD_CHANGED,
+   NEW_PASSWORD_CHANGED,
+   CONFIRM_PASSWORD_CHANGED
+
 } from '../actions/types';
 import axios from "axios"
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -200,6 +208,48 @@ export const setdate = (selectedDate,hdate,date,driver) =>{
 }
 
 
+export const updateposition = (latitude,longitude,routeCoordinates,distanceTravelled,prevLatLng) =>{
+    return(dispatch)=>{
+dispatch({type:FOLLOW_DRIVER,payload:{latitude,longitude,routeCoordinates,distanceTravelled,prevLatLng}})
+    }
+}
+
+
+export const emailchanged = (text) =>{
+    return(dispatch)=>{
+        dispatch({type:EMAIL_CHANGED,payload:text})
+    }
+}
+
+// export const namechanged = (text) =>{
+//     return(dispatch)=>{
+//         dispatch({type:FULL_NAME_CHANGED,payload:text})
+//     }
+// }
+
+export const phonechanged = (text) =>{
+    return(dispatch)=>{
+        dispatch({type:PHONE_NUMBER_CHANGED,payload:text})
+    }
+}
+
+export const oldpwdchanged = (text) =>{
+    return(dispatch)=>{
+        dispatch({type:OLD_PASSWORD_CHANGED,payload:text})
+    }
+}
+
+export const newpwdchanged = (text) =>{
+    return(dispatch)=>{
+        dispatch({type:NEW_PASSWORD_CHANGED,payload:text})
+    }
+}
+
+export const confirmpwdchanged = (text) =>{
+    return(dispatch)=>{
+        dispatch({type:CONFIRM_PASSWORD_CHANGED,payload:text})
+    }
+}
 
 
 

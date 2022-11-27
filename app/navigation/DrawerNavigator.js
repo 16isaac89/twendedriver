@@ -46,7 +46,7 @@ class DrawerNavigator extends Component {
                <Icon
                   name="location-city"
                   size={40}
-                  color={focused ? '#7cc' : 'green'}
+                  color={focused ? '#7cc' : '#2ac759'}
                />
             ),
          }}
@@ -60,7 +60,7 @@ class DrawerNavigator extends Component {
                <Icon
                   name="settings"
                   size={40}
-                  color={focused ? '#7cc' : 'green'}
+                  color={focused ? '#7cc' : '#e3cb14'}
                />
             ),
          }}
@@ -73,7 +73,7 @@ class DrawerNavigator extends Component {
             title: 'Trips',
             headerShown: false, gestureEnabled: false,
             drawerIcon: ({focused, size}) => (
-               <MaterialIcons name="trip-origin" size={40} color={focused ? 'orange' : 'green'} />
+               <MaterialIcons name="trip-origin" size={40} color={focused ? 'orange' : '#18689e'} />
               
             ),
          }}
@@ -116,7 +116,7 @@ class DrawerNavigator extends Component {
         options={{
             title: 'Earnings',
             drawerIcon: ({focused, size}) => (
-               <Entypo name="bar-graph" size={40} color={focused ? 'orange' : 'green'} />
+               <Entypo name="bar-graph" size={40} color={focused ? 'orange' : '#c4162d'} />
             ),
          }}
         />

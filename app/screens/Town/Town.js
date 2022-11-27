@@ -3,7 +3,7 @@ import React, {Component, Fragment} from 'react';
 
 
 import Colors from '../../theme/colors';
-import MapView, {Marker}from 'react-native-maps';
+import MapView, {Marker,PROVIDER_GOOGLE,Polyline}from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions,TouchableOpacity,Animated,Image,PermissionsAndroid,Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -14,9 +14,29 @@ import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 import ActivityIndicatorModal from '../../components/modals/ActivityIndicatorModal';
 import Geolocation from 'react-native-geolocation-service';
-
+import haversine from 'haversine'
 class Town extends Component {
+
+
+ 
+
+
+  
+
+  async componentDidMount(){
+    await this.backgroundlocations()
+  }
+
+
+  getMapRegion = () => ({
+    latitude: this.props.latitude,
+    longitude: this.props.longitude,
+    latitudeDelta: 0.04864195044303443,
+    longitudeDelta: 0.040142817690068,
+   });
+
   componentDidUpdate(prevProps){
+    console.log(this.props.distanceTravelled)
     if ( this.props.active !== prevProps.active ) {
       this.props.navigation.navigate('Accepted')
   }
@@ -43,7 +63,7 @@ class Town extends Component {
               (error) => {
                 console.log(error);
               },
-              { enableHighAccuracy: true, distanceFilter: 100,maximumAge: 0, fastestInterval: 2000,showsBackgroundLocationIndicator:true }
+              { enableHighAccuracy: true, distanceFilter: 100,maximumAge: 0, fastestInterval: 2000,showsBackgroundLocationIndicator:true,interval:1000 }
             );
           } else if (result['android.permission.ACCESS_COARSE_LOCATION']
           || result['android.permission.ACCESS_FINE_LOCATION']
@@ -54,26 +74,7 @@ class Town extends Component {
     }
   }
   
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const duration = 500
-  
-    if (this.props.coordinate !== nextProps.coordinate) {
-      if (Platform.OS === 'android') {
-        if (this.marker) {
-          this.marker.animateMarkerToCoordinate(
-            nextProps.coordinate,
-            duration
-          );
-        }
-      } else {
-        this.state.coordinate.timing({
-          ...nextProps.coordinate,
-          useNativeDriver: true, // defaults to false if not passed explicitly
-          duration
-        }).start();
-      }
-    }
-  }
+
 
   render() {
     return (
@@ -81,14 +82,10 @@ class Town extends Component {
         
           <Modal />
         <MapView style={styles.map}
+        provider={PROVIDER_GOOGLE}
                 showsUserLocation={true}
-                followsUserLocation={true}
-        region={{
-          latitude: this.props.latitude,
-          longitude: this.props.longitude,
-          latitudeDelta: 0.04864195044303443,
-          longitudeDelta: 0.040142817690068,
-        }}
+               // followsUserLocation={true}
+                region={this.getMapRegion()}
          initialRegion={{
           latitude: this.props.latitude,
           longitude: this.props.longitude,
@@ -96,10 +93,11 @@ class Town extends Component {
           longitudeDelta: 0.040142817690068,
           }}
         >
-           <Marker
+           {/* <Marker
         ref={marker => { this.marker = marker }}
         coordinate={this.props.coordinate}
-      >
+      > */}
+      <Marker coordinate={this.getMapRegion()} >
        <MaterialIcons name="delivery-dining" size={40} color="green" />
         </Marker>
         </MapView>
@@ -115,7 +113,7 @@ class Town extends Component {
 <TouchableOpacity onPress={()=> this.props.navigation.openDrawer()} style={styles.menubtn}>
 <Icon
     name="menu"
-    backgroundColor="#3b5998"
+    color="green"
     size={40}
   />
 </TouchableOpacity> 
@@ -133,7 +131,7 @@ class Town extends Component {
 <TouchableOpacity onPress={()=> this.starttrack()} style={styles.menubtn}>
 <MaterialIcons
     name="gps-fixed"
-    backgroundColor="#3b5998"
+    color="green"
     size={40}
   />
 </TouchableOpacity> 
@@ -150,7 +148,7 @@ class Town extends Component {
         }}
     >
 <TouchableOpacity onPress={()=> this.props.navigation.navigate('Camera')} style={styles.menuscanner}>
-<FontAwesome name="qrcode" size={60} color="black" />
+<FontAwesome name="qrcode" size={60} color="green" />
 </TouchableOpacity>
 </View>
 
@@ -168,7 +166,7 @@ class Town extends Component {
         }}
 
     >
-      <Text style={styles.textStyle3}>SPEED:{this.props.speed}</Text>
+      {/* <Text style={styles.textStyle3}>SPEED:{this.props.distanceTravelled}</Text> */}
     </View>
 
 <View
@@ -221,7 +219,10 @@ function mapStateToProps( state ) {
    active:state.order.active,
    earning:state.order.earning,
    coordinate:state.auth.coordinate,
-   active:state.order.active
+   active:state.order.active,
+   routeCoordinates: state.auth.routeCoordinates,
+  distanceTravelled: state.auth.distanceTravelled,
+  prevLatLng:state.auth.valueprevLatLng
   };
 }
 
@@ -238,6 +239,7 @@ const styles = StyleSheet.create({
     map: {
       width: Dimensions.get('window').width,
       height: Dimensions.get('window').height,
+      ...StyleSheet.absoluteFillObject
     },
     textStyle2: {
       color: "white",

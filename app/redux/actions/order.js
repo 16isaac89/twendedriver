@@ -30,18 +30,21 @@ import {
     CLOSE_UPCOUNTRY_MODAL,
     OPEN_UPCOUNTRY_MODAL,
     SET_SCANNED,
-    SENDING_ORDER
+    SENDING_ORDER,
+    SEND_STATUS
  } from '../actions/types';
  import axios from 'axios'
  import {commonurl} from '../../utils/utilities'
  import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import moment from 'moment-timezone'
-
+import Geolocation from 'react-native-geolocation-service';
+import {PermissionsAndroid,Platform } from 'react-native';
 import Pusher from 'pusher-js/react-native';
 import Echo from 'laravel-echo';
 import Sound from 'react-native-sound'
 import RootNavigation from '../../navigation/RootNavigation'
+import * as RNLocalize from "react-native-localize";
 Sound.setCategory('Playback');
 
 
@@ -241,6 +244,64 @@ export const stopSound = async(sound)=> {
 
  export const sendOtp=(id,otp)=>{
     return async(dispatch)=>{
+
+
+      
+      if (Platform.OS === 'android') {
+         PermissionsAndroid.requestMultiple(
+           [
+           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+           PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+           PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION
+           ]
+           ).then(async(result) => {
+             if (result['android.permission.ACCESS_COARSE_LOCATION']
+             && result['android.permission.ACCESS_FINE_LOCATION'] === 'granted') {
+               let timezone = RNLocalize.getTimeZone()
+               let time = await moment().tz(timezone).format('YYYY-MM-DD HH:mm:ss');
+               Geolocation.getCurrentPosition(
+                  (position) => {
+                     axios.post(ROOT_URL+"/order/check/otp", {
+                        id:id,
+                        status:'started',
+                        otp:otp,
+                       // address:address,
+                        startlat:position.latitude,
+                        startlongitude:position.longitude,
+                        time:time
+                     })
+                         .then( async(response)  => {
+                            let status = response.data.status
+                            if(status === 1){
+                                let order = response.data.order
+                                let status = response.data.order.status
+                                await AsyncStorage.setItem('activeorder', JSON.stringify(order))
+                                 dispatch({type:OTP_SENT,payload:status})
+                            }else{
+                                alert('Wrong otp please try again')
+                            }
+                           
+                         })
+                         .catch(function (error) {
+                            dispatch({type:SEND_FAILED})
+                             console.log(error.response)
+                         })
+                  },
+                  (error) => {
+                    // See error code charts below.
+                    console.log(error.code, error.message);
+                  },
+                  { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+              );
+             } else if (result['android.permission.ACCESS_COARSE_LOCATION']
+             || result['android.permission.ACCESS_FINE_LOCATION'] === 'never_ask_again') {
+               alert('Please Go into Settings -> Applications -> APP_NAME -> Permissions and Allow permissions to continue');
+             }
+           });
+         }
+
+
+   
         
       //   let address = ""
      
@@ -260,31 +321,7 @@ export const stopSound = async(sound)=> {
       //  for (let item of response) {
       //     address = `${item.name}, ${item.street}, ${item.city}`;
       //  }
-      //   axios.post(ROOT_URL+"/order/check/otp", {
-      //       id:id,
-      //       status:'started',
-      //       otp:otp,
-      //       address:address,
-      //       startlat:latitude,
-      //       startlongitude:longitude,
-      //       time:time
-      //    })
-      //        .then( async(response)  => {
-      //           let status = response.data.status
-      //           if(status === 1){
-      //               let order = response.data.order
-      //               let status = response.data.order.status
-      //               await AsyncStorage.setItem('activeorder', JSON.stringify(order))
-      //                dispatch({type:OTP_SENT,payload:status})
-      //           }else{
-      //               alert('Wrong otp please try again')
-      //           }
-               
-      //        })
-      //        .catch(function (error) {
-      //           dispatch({type:SEND_FAILED})
-      //            console.log(error.response)
-      //        })
+    
     }
  }
 
@@ -299,8 +336,10 @@ export const stopSound = async(sound)=> {
              .then( async(response)  => {
                     let order = response.data.order
                     let status = response.data.order.status
+                    console.log('let status = response.data.order.status')
+                    console.log(status)
                     await AsyncStorage.setItem('activeorder', JSON.stringify(order))
-                     dispatch({type:OTP_SENT,payload:status})
+                     dispatch({type:SEND_STATUS,payload:status})
              })
              .catch(function (error) {
                 dispatch({type:SEND_FAILED})

@@ -49,7 +49,6 @@ class App extends Component {
               && result['android.permission.ACCESS_FINE_LOCATION'] === 'granted') {
                 Geolocation.watchPosition(
                   (position) => {
-                    console.log(position.coords);
                     store.dispatch(updateLocation(position))
                     
                   },
@@ -119,8 +118,6 @@ class App extends Component {
   trackdriver = async() =>{
     watchId = Geolocation.watchPosition(
       (position) => {
-        console.log("position");
-        console.log(position.coords.latitude);
         store.dispatch(updateLocation(position))
         
       },

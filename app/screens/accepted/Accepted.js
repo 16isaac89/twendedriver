@@ -10,8 +10,57 @@ import StartModal from '../../components/modals/StartModal';
 import CompleteOrder from '../../components/modals/CompleteOrder';
 const GOOGLE_MAPS_APIKEY = 'AIzaSyDSGXiLg9kRk_93B-s_2VFkrnqHfULeZtI';
 import MapViewDirections from 'react-native-maps-directions';
+import haversine from 'haversine'
+import Geolocation from 'react-native-geolocation-service';
 
  class Accepted extends Component {
+  calcDistance = newLatLng => {
+    let prevLatLng  = this.props.prevLatLng;
+    console.log(prevLatLng,newLatLng)
+    return haversine(prevLatLng, newLatLng) || 0;
+  };
+  backgroundlocations = async() =>{
+    await Geolocation.watchPosition(
+       (position) => {
+         const { latitude, longitude } = position.coords;
+         
+         // const { routeCoordinates,distanceTravelled  } = this.state;
+         let newCoordinate = {
+           latitude,
+           longitude
+         };
+         let routeCoordinates = this.props.routeCoordinates
+         let distanceTravelled = this.props.distanceTravelled + this.calcDistance(newCoordinate)
+         let prevLatLng = newCoordinate
+         console.log("prevLatLng")
+         console.log(prevLatLng)
+         this.props.updateposition(latitude,longitude,routeCoordinates,distanceTravelled,prevLatLng)
+       
+       },
+       (error) => {
+         console.log(error);
+       },
+       //{ enableHighAccuracy: true, timeout: 15000, maximumAge: 10000,interval:1000 }
+       { enableHighAccuracy: true, distanceFilter: 1,maximumAge: 0, fastestInterval: 2000,showsBackgroundLocationIndicator:true }
+     // this.getlocation()
+     )
+}
+componentDidMount(){
+  console.log("this.props.orderstatussdsadasd")
+  console.log(this.props.orderstatus)
+}
+  starttrack = () =>{
+    navigator.geolocation.watchPosition(
+      position => {
+       const { latitude, longitude } = position.coords;
+       const { routeCoordinates,distanceTravelled  } = this.state;
+       const newCoordinate = {
+        latitude,
+        longitude
+       };
+      
+    })
+  }
   cancelorder = ()=>{
     let driver = this.props.user.id
     let id = this.props.active.id
@@ -27,9 +76,9 @@ componentDidUpdate(){
       this.props.opencompletemodal()
     }
   }
-  componentWillUnmount(){
-    this.props.clearstate()
-  }
+  // componentWillUnmount(){
+  //   this.props.clearstate()
+  // }
   arrive = () =>{
     let id = this.props.active.id
     let message = "arrived"
@@ -47,9 +96,12 @@ btnCancel = () =>{
   if(status === "started" || status === "completed"){
 return
   }else{
-    return  this.props.loader === true ? <ActivityIndicator size="large" /> : <TouchableOpacity onPress={()=>this.cancelorder()}  style={styles.appButtonContainer2}>
+    return  this.props.loader === true ? <ActivityIndicator size="large" /> : 
+    <View style={{flexDirection:'row',}}>
+    <TouchableOpacity onPress={()=>this.cancelorder()}  style={styles.appButtonContainer2}>
 <Text style={styles.appButtonText}>Cancel</Text>
 </TouchableOpacity>
+</View>
   }
 }
 btnSign = () =>{
@@ -148,7 +200,10 @@ function mapStateToProps( state ) {
    orderstatus:state.order.orderstatus,
    orderimage:state.order.orderimage,
    completedstatus:state.order.completedstatus,
-   user:state.auth.user
+   user:state.auth.user,
+   routeCoordinates: state.auth.routeCoordinates,
+   distanceTravelled: state.auth.distanceTravelled,
+   prevLatLng:state.auth.valueprevLatLng
   };
 }
 

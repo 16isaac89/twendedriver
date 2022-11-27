@@ -16,10 +16,7 @@ messaging().onMessage(async remoteMessage => {
   let notificationbody = JSON.parse(remoteMessage.data.body)
   let notification = notificationbody.order
   await store.dispatch(orderNotification(notification));
- // await store.dispatch(openModal());
- console.log("notification index")
- console.log(typeof(notification.order))
- console.log("notification index")
+
   notifee.displayNotification({
     title: 'Your order has been shipped',
     body: `Your order was shipped`,
@@ -33,12 +30,6 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   let notificationbody = JSON.parse(remoteMessage.data.body)
   let notification = notificationbody.order
   await store.dispatch(orderNotification(notification));
-  console.log("notification index2")
- console.log(notification.order)
- console.log("notification index2")
-  //await store.dispatch(orderNotification(notification));
- // await store.dispatch(openModal());
-  console.log('Message handled in the background!', remoteMessage);
 });
 
 
@@ -94,8 +85,8 @@ ReactNativeForegroundService.add_task(
 
 ReactNativeForegroundService.start({
   id: 144,
-  title: "Background Location on",
-  message: "",
+  title: "Background mode activated",
+  message: "Twende is currently running in background mode.",
 });
 
 // Register the service

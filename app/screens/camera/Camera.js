@@ -23,6 +23,7 @@ class Camera extends Component {
 
   render() {
     return (
+      <View>
       <QRCodeScanner
         onRead={this.onSuccess}
         flashMode={RNCamera.Constants.FlashMode.auto}
@@ -40,6 +41,7 @@ class Camera extends Component {
           </TouchableOpacity>
         }
       />
+      </View>
     );
   }
 }

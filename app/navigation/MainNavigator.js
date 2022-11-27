@@ -124,7 +124,6 @@ class MainNavigatorA extends Component {
           headerTintColor: Colors.onBackground,
           headerTitleAlign: 'center',
           animationTypeForReplace: 'pop',
-          
         }}>
        
        { this.props.isloggedin == false ? (

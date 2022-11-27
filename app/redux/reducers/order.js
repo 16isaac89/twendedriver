@@ -29,7 +29,8 @@ import {
     CLOSE_UPCOUNTRY_MODAL,
     OPEN_UPCOUNTRY_MODAL,
     SET_SCANNED,
-    SENDING_ORDER
+    SENDING_ORDER,
+    SEND_STATUS
  } from '../actions/types';
  
  const INITIAL_STATE = {
@@ -93,6 +94,8 @@ import {
       return{...state,loader:true}
     case OTP_SENT:
       return{...state,loader:false,otp:'',startmodal:false,orderstatus:action.payload.status}
+    case SEND_STATUS:
+      return{...state,loader:false,otp:'',startmodal:false,orderstatus:action.payload}
     case ORDER_ID_CHANGED:
       return{...state,orderid:action.payload}
     case ORDER_COMPLETE_IMAGE:
