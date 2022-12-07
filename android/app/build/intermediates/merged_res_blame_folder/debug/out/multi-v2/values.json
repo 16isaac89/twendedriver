@@ -387,6 +387,25 @@
                     }
                 },
                 {
+                    "source": "C:\\Users\\USER\\.gradle\\caches\\transforms-3\\86f8864284c6b88b94d8f6dfbb00abfc\\transformed\\jetified-android-maps-utils-0.5\\res\\values\\values.xml",
+                    "from": {
+                        "startLines": "2,3,7,10",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,93,301,461",
+                        "endLines": "2,6,9,14",
+                        "endColumns": "37,12,12,12",
+                        "endOffsets": "88,296,456,708"
+                    },
+                    "to": {
+                        "startLines": "739,4660,4664,4667",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "44946,310572,310780,310940",
+                        "endLines": "739,4663,4666,4671",
+                        "endColumns": "37,12,12,12",
+                        "endOffsets": "44979,310775,310935,311187"
+                    }
+                },
+                {
                     "source": "C:\\Users\\USER\\.gradle\\caches\\transforms-3\\2c6224b2a4e48a3ff57825e2652d259e\\transformed\\cardview-1.0.0\\res\\values\\values.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,35,36,37,38,45,47,50,7",
@@ -403,25 +422,6 @@
                         "endLines": "11,131,132,133,134,444,445,446,1053,2875,2878,2881,5725",
                         "endColumns": "51,60,61,61,63,58,56,53,12,12,12,12,24",
                         "endOffsets": "600,7730,7792,7854,7918,25931,25988,26042,73114,191704,191830,191958,369312"
-                    }
-                },
-                {
-                    "source": "C:\\Users\\USER\\.gradle\\caches\\transforms-3\\88869ac9b01d4a6440d48b97212cb00d\\transformed\\jetified-android-maps-utils-0.5\\res\\values\\values.xml",
-                    "from": {
-                        "startLines": "2,3,7,10",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,93,301,461",
-                        "endLines": "2,6,9,14",
-                        "endColumns": "37,12,12,12",
-                        "endOffsets": "88,296,456,708"
-                    },
-                    "to": {
-                        "startLines": "739,4660,4664,4667",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "44946,310572,310780,310940",
-                        "endLines": "739,4663,4666,4671",
-                        "endColumns": "37,12,12,12",
-                        "endOffsets": "44979,310775,310935,311187"
                     }
                 },
                 {

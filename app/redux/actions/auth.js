@@ -145,15 +145,17 @@ export const saveNotificationToken = (token) =>{
         dispatch({type:GET_LOCATION,payload:position})
         if(userdata){
             let id = JSON.parse(userdata).id
+            console.log(id)
         axios.post(ROOT_URL+"/location/driver", {
-            lat:position.latitude,
-            lon:position.longitude,
+            lat:position.coords.latitude,
+            lon:position.coords.longitude,
             id:id
          })
              .then( async(response)  => {
                
              })
              .catch(function (error) {
+                console.log(error.response)
                  console.log(error.response.message)
                  
              })

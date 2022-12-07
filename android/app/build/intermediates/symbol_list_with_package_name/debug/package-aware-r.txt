@@ -2160,7 +2160,10 @@ layout text_view_with_theme_line_height
 layout text_view_without_line_height
 layout texture_view
 mipmap ic_launcher
+mipmap ic_launcher_adaptive_back
+mipmap ic_launcher_adaptive_fore
 mipmap ic_launcher_round
+mipmap launch_screen
 plurals mtrl_badge_content_description
 raw amu_ballon_gx_prefix
 raw amu_basic_folder
@@ -2183,6 +2186,7 @@ raw amu_unknwown_folder
 raw amu_unsupported
 raw amu_visibility_ground_overlay
 raw firebase_common_keep
+raw loading
 raw notification
 string abc_action_bar_home_description
 string abc_action_bar_up_description

@@ -23,11 +23,6 @@ class Town extends Component {
 
   
 
-  async componentDidMount(){
-    await this.backgroundlocations()
-  }
-
-
   getMapRegion = () => ({
     latitude: this.props.latitude,
     longitude: this.props.longitude,

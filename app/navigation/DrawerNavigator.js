@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; 
 import  Entypo from 'react-native-vector-icons/Entypo'; 
+import Watch from '../screens/Town/Watch'
 
 
 
@@ -113,6 +114,17 @@ class DrawerNavigator extends Component {
 <Drawer.Screen 
         name="Earnings" 
         component={Earnings} 
+        options={{
+            title: 'Earnings',
+            drawerIcon: ({focused, size}) => (
+               <Entypo name="bar-graph" size={40} color={focused ? 'orange' : '#c4162d'} />
+            ),
+         }}
+        />
+
+<Drawer.Screen 
+        name="Watch" 
+        component={Watch} 
         options={{
             title: 'Earnings',
             drawerIcon: ({focused, size}) => (

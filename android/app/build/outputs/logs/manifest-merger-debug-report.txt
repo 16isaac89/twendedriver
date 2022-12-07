@@ -128,7 +128,7 @@ MERGED from [androidx.print:print:1.0.0] C:\Users\USER\.gradle\caches\transforms
 MERGED from [app.notifee:core:202108261754] C:\Users\USER\.gradle\caches\transforms-3\436db2bba994ea50d79dbf488475ebf8\transformed\jetified-core-202108261754\AndroidManifest.xml:2:1-84:12
 MERGED from [com.github.henninghall:numberpickerview:v1.1.5] C:\Users\USER\.gradle\caches\transforms-3\47cf6da2634cbe850b4ca09a31bee9a7\transformed\jetified-numberpickerview-v1.1.5\AndroidManifest.xml:2:1-11:12
 MERGED from [net.time4j:time4j-android:4.8-2021a] C:\Users\USER\.gradle\caches\transforms-3\5ac22059c4c516bb9ebbda0ff2178103\transformed\jetified-time4j-android-4.8-2021a\AndroidManifest.xml:2:1-13:12
-MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\USER\.gradle\caches\transforms-3\88869ac9b01d4a6440d48b97212cb00d\transformed\jetified-android-maps-utils-0.5\AndroidManifest.xml:2:1-13:12
+MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\USER\.gradle\caches\transforms-3\86f8864284c6b88b94d8f6dfbb00abfc\transformed\jetified-android-maps-utils-0.5\AndroidManifest.xml:2:1-13:12
 MERGED from [com.facebook.fresco:fbcore:2.6.0] C:\Users\USER\.gradle\caches\transforms-3\8d346a2f31cbcee48f7854cf05ee3f67\transformed\jetified-fbcore-2.6.0\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\USER\.gradle\caches\transforms-3\8ddeee8168763a94a6d7c519407ce760\transformed\jetified-annotation-experimental-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\USER\.gradle\caches\transforms-3\25a593b6cdcfc87e4bdfa01619415819\transformed\jetified-image-1.0.0-beta1\AndroidManifest.xml:2:1-9:12
@@ -302,8 +302,8 @@ MERGED from [app.notifee:core:202108261754] C:\Users\USER\.gradle\caches\transfo
 MERGED from [app.notifee:core:202108261754] C:\Users\USER\.gradle\caches\transforms-3\436db2bba994ea50d79dbf488475ebf8\transformed\jetified-core-202108261754\AndroidManifest.xml:26:5-82:19
 MERGED from [net.time4j:time4j-android:4.8-2021a] C:\Users\USER\.gradle\caches\transforms-3\5ac22059c4c516bb9ebbda0ff2178103\transformed\jetified-time4j-android-4.8-2021a\AndroidManifest.xml:11:5-20
 MERGED from [net.time4j:time4j-android:4.8-2021a] C:\Users\USER\.gradle\caches\transforms-3\5ac22059c4c516bb9ebbda0ff2178103\transformed\jetified-time4j-android-4.8-2021a\AndroidManifest.xml:11:5-20
-MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\USER\.gradle\caches\transforms-3\88869ac9b01d4a6440d48b97212cb00d\transformed\jetified-android-maps-utils-0.5\AndroidManifest.xml:7:5-11:19
-MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\USER\.gradle\caches\transforms-3\88869ac9b01d4a6440d48b97212cb00d\transformed\jetified-android-maps-utils-0.5\AndroidManifest.xml:7:5-11:19
+MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\USER\.gradle\caches\transforms-3\86f8864284c6b88b94d8f6dfbb00abfc\transformed\jetified-android-maps-utils-0.5\AndroidManifest.xml:7:5-11:19
+MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\USER\.gradle\caches\transforms-3\86f8864284c6b88b94d8f6dfbb00abfc\transformed\jetified-android-maps-utils-0.5\AndroidManifest.xml:7:5-11:19
 MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\USER\.gradle\caches\transforms-3\25a593b6cdcfc87e4bdfa01619415819\transformed\jetified-image-1.0.0-beta1\AndroidManifest.xml:7:5-20
 MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\USER\.gradle\caches\transforms-3\25a593b6cdcfc87e4bdfa01619415819\transformed\jetified-image-1.0.0-beta1\AndroidManifest.xml:7:5-20
 	android:appComponentFactory
@@ -638,8 +638,8 @@ MERGED from [com.github.henninghall:numberpickerview:v1.1.5] C:\Users\USER\.grad
 MERGED from [com.github.henninghall:numberpickerview:v1.1.5] C:\Users\USER\.gradle\caches\transforms-3\47cf6da2634cbe850b4ca09a31bee9a7\transformed\jetified-numberpickerview-v1.1.5\AndroidManifest.xml:7:5-9:41
 MERGED from [net.time4j:time4j-android:4.8-2021a] C:\Users\USER\.gradle\caches\transforms-3\5ac22059c4c516bb9ebbda0ff2178103\transformed\jetified-time4j-android-4.8-2021a\AndroidManifest.xml:7:5-9:41
 MERGED from [net.time4j:time4j-android:4.8-2021a] C:\Users\USER\.gradle\caches\transforms-3\5ac22059c4c516bb9ebbda0ff2178103\transformed\jetified-time4j-android-4.8-2021a\AndroidManifest.xml:7:5-9:41
-MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\USER\.gradle\caches\transforms-3\88869ac9b01d4a6440d48b97212cb00d\transformed\jetified-android-maps-utils-0.5\AndroidManifest.xml:5:5-43
-MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\USER\.gradle\caches\transforms-3\88869ac9b01d4a6440d48b97212cb00d\transformed\jetified-android-maps-utils-0.5\AndroidManifest.xml:5:5-43
+MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\USER\.gradle\caches\transforms-3\86f8864284c6b88b94d8f6dfbb00abfc\transformed\jetified-android-maps-utils-0.5\AndroidManifest.xml:5:5-43
+MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\USER\.gradle\caches\transforms-3\86f8864284c6b88b94d8f6dfbb00abfc\transformed\jetified-android-maps-utils-0.5\AndroidManifest.xml:5:5-43
 MERGED from [com.facebook.fresco:fbcore:2.6.0] C:\Users\USER\.gradle\caches\transforms-3\8d346a2f31cbcee48f7854cf05ee3f67\transformed\jetified-fbcore-2.6.0\AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:fbcore:2.6.0] C:\Users\USER\.gradle\caches\transforms-3\8d346a2f31cbcee48f7854cf05ee3f67\transformed\jetified-fbcore-2.6.0\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\USER\.gradle\caches\transforms-3\8ddeee8168763a94a6d7c519407ce760\transformed\jetified-annotation-experimental-1.1.0\AndroidManifest.xml:20:5-22:41
@@ -1236,8 +1236,8 @@ ADDED from [com.google.firebase:firebase-common:20.2.0] C:\Users\USER\.gradle\ca
 		ADDED from [com.google.firebase:firebase-common:20.2.0] C:\Users\USER\.gradle\caches\transforms-3\061b8bff9bf1f53d1bfab2c424615661\transformed\jetified-firebase-common-20.2.0\AndroidManifest.xml:26:13-77
 meta-data#com.google.android.gms.version
 ADDED from [com.google.android.gms:play-services-basement:18.1.0] C:\Users\USER\.gradle\caches\transforms-3\730ddebbf5733c6fe219b00b1f1441fa\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:21:9-23:69
-MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\USER\.gradle\caches\transforms-3\88869ac9b01d4a6440d48b97212cb00d\transformed\jetified-android-maps-utils-0.5\AndroidManifest.xml:8:9-10:69
-MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\USER\.gradle\caches\transforms-3\88869ac9b01d4a6440d48b97212cb00d\transformed\jetified-android-maps-utils-0.5\AndroidManifest.xml:8:9-10:69
+MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\USER\.gradle\caches\transforms-3\86f8864284c6b88b94d8f6dfbb00abfc\transformed\jetified-android-maps-utils-0.5\AndroidManifest.xml:8:9-10:69
+MERGED from [com.google.maps.android:android-maps-utils:0.5] C:\Users\USER\.gradle\caches\transforms-3\86f8864284c6b88b94d8f6dfbb00abfc\transformed\jetified-android-maps-utils-0.5\AndroidManifest.xml:8:9-10:69
 	android:value
 		ADDED from [com.google.android.gms:play-services-basement:18.1.0] C:\Users\USER\.gradle\caches\transforms-3\730ddebbf5733c6fe219b00b1f1441fa\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:23:13-66
 	android:name

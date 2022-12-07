@@ -1,5 +1,6 @@
 import App from './App';
-import {AppRegistry} from 'react-native';
+import {AppRegistry,PermissionsAndroid,Platform} from 'react-native';
+
 import {name as appName} from './app.json';
 import store from "./app/redux/store"
 import {checklogin,orderNotification,openModal,updateLocation} from "./app/redux/actions"
@@ -62,23 +63,42 @@ notifee.onForegroundEvent(({ type, detail }) => {
 
 ReactNativeForegroundService.add_task(
   () => {
-    Geolocation.watchPosition(
-      (position) => {
-        console.log(position.coords);
-        store.dispatch(updateLocation(position))
-        
-      },
-      (error) => {
-        console.log(error);
-      },
-      { enableHighAccuracy: true, distanceFilter: 100,maximumAge: 0, fastestInterval: 2000,showsBackgroundLocationIndicator:true }
-    // this.getlocation()
-    )
+    if (Platform.OS === 'android') {
+      PermissionsAndroid.requestMultiple(
+        [
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+        PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION
+        ]
+        ).then((result) => {
+          if (result['android.permission.ACCESS_COARSE_LOCATION']
+          && result['android.permission.ACCESS_BACKGROUND_LOCATION']
+          && result['android.permission.ACCESS_FINE_LOCATION'] === 'granted') {
+            Geolocation.watchPosition(
+              (position) => {
+                
+                store.dispatch(updateLocation(position))
+                console.log(position.coords)
+              },
+              (error) => {
+                console.log("error");
+                console.log(error);
+              },
+              { enableHighAccuracy: true, distanceFilter: 100,maximumAge: 0, fastestInterval: 2000,showsBackgroundLocationIndicator:true }
+            // this.getlocation()
+            )
+          } else if (result['android.permission.ACCESS_COARSE_LOCATION']
+          || result['android.permission.ACCESS_FINE_LOCATION']
+          || result['android.permission.ACCESS_BACKGROUND_LOCATION'] === 'never_ask_again') {
+            alert('Please Go into Settings -> Applications -> Twende Delivery -> Permissions and Allow permissions to continue');
+          }
+        });
+    }
   },
   {
-    delay: 1000,
+    delay: 1,
     onLoop: true,
-    taskId: 'taskid',
+    taskId: 'taskid12',
     onError: (e) => console.log('Error logging:', e),
   },
 );

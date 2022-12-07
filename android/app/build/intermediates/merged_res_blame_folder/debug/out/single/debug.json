@@ -1,15 +1,7 @@
 [
     {
-        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-hdpi_ic_launcher_round.png.flat",
-        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher_round.png"
-    },
-    {
-        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xhdpi_ic_launcher_round.png.flat",
-        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher_round.png"
-    },
-    {
-        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\raw_loading.json.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\raw\\loading.json"
     },
     {
         "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-hdpi_ic_launcher.png.flat",
@@ -20,20 +12,28 @@
         "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher_round.png"
     },
     {
-        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxhdpi_ic_launcher.png.flat",
-        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxxhdpi_ic_launcher_adaptive_fore.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher_adaptive_fore.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxhdpi_launch_screen.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\launch_screen.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xhdpi_ic_launcher_adaptive_back.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher_adaptive_back.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-mdpi_ic_launcher_adaptive_back.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher_adaptive_back.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-hdpi_launch_screen.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-hdpi\\launch_screen.png"
     },
     {
         "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxxhdpi_ic_launcher.png.flat",
         "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
-    },
-    {
-        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\raw_notification.mp3.flat",
-        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\raw\\notification.mp3"
-    },
-    {
-        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\drawable_rn_edit_text_material.xml.flat",
-        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\drawable\\rn_edit_text_material.xml"
     },
     {
         "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
@@ -46,5 +46,69 @@
     {
         "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-mdpi_ic_launcher.png.flat",
         "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xhdpi_ic_launcher_adaptive_fore.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xhdpi\\ic_launcher_adaptive_fore.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxxhdpi_launch_screen.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\launch_screen.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxxhdpi_ic_launcher_adaptive_back.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher_adaptive_back.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-mdpi_launch_screen.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-mdpi\\launch_screen.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-mdpi_ic_launcher_adaptive_fore.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher_adaptive_fore.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxhdpi_ic_launcher_adaptive_fore.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher_adaptive_fore.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-hdpi_ic_launcher_adaptive_back.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher_adaptive_back.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\raw_notification.mp3.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\raw\\notification.mp3"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\drawable_rn_edit_text_material.xml.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\drawable\\rn_edit_text_material.xml"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-hdpi_ic_launcher_adaptive_fore.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher_adaptive_fore.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xhdpi_launch_screen.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xhdpi\\launch_screen.png"
+    },
+    {
+        "merged": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\build\\intermediates\\merged_res\\debug\\mipmap-xxhdpi_ic_launcher_adaptive_back.png.flat",
+        "source": "D:\\Mobileapps\\twende\\driverapp\\android\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher_adaptive_back.png"
     }
 ]

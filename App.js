@@ -7,7 +7,7 @@ import MainNavigator from './app/navigation/MainNavigator';
 
 import { Provider } from 'react-redux';
 import store from './app/redux/store'
-import {saveNotificationToken,updateLocation,checklogin,orderNotification} from './app/redux/actions'
+import {saveNotificationToken,updateLocation,checklogin,orderNotification,} from './app/redux/actions'
 import NetworkProvider from './app/config/Network';
 import Nonetwork from './app/components/modals/Nonetwork'
 import OrderModal from './app/components/modals/OrderModal';
@@ -23,61 +23,16 @@ class App extends Component {
 
    getFcmToken = async () => {
     const fcmToken = await messaging().getToken();
+  
     if (fcmToken) {
-        console.log(fcmToken);
-        console.log("Your Firebase Token is:", fcmToken);
+        store.dispatch(saveNotificationToken(fcmToken))
     } else {
         console.log("Failed", "No Token Recived");
     }
   };
 
   // then use it
-  backgroundlocation = () =>{
-    ReactNativeForegroundService.add_task(
-      () => {
-
-        if (Platform.OS === 'android') {
-          PermissionsAndroid.requestMultiple(
-            [
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
-            PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION
-            ]
-            ).then((result) => {
-              if (result['android.permission.ACCESS_COARSE_LOCATION']
-              && result['android.permission.ACCESS_BACKGROUND_LOCATION']
-              && result['android.permission.ACCESS_FINE_LOCATION'] === 'granted') {
-                Geolocation.watchPosition(
-                  (position) => {
-                    store.dispatch(updateLocation(position))
-                    
-                  },
-                  (error) => {
-                    console.log(error);
-                  },
-                  { enableHighAccuracy: true, distanceFilter: 100,maximumAge: 0, fastestInterval: 2000,showsBackgroundLocationIndicator:true }
-                // this.getlocation()
-                )
-              } else if (result['android.permission.ACCESS_COARSE_LOCATION']
-              || result['android.permission.ACCESS_FINE_LOCATION']
-              || result['android.permission.ACCESS_BACKGROUND_LOCATION'] === 'never_ask_again') {
-                alert('Please Go into Settings -> Applications -> APP_NAME -> Permissions and Allow permissions to continue');
-              }
-            });
-        }
-
-
-        
-      },
-      {
-        delay: 1000,
-        onLoop: true,
-        taskId: 'taskid',
-        onError: (e) => console.log('Error logging:', e),
-      },
-    );
-  }
-  
+ 
   
 
   gettoken = async() =>{
@@ -119,7 +74,6 @@ class App extends Component {
     watchId = Geolocation.watchPosition(
       (position) => {
         store.dispatch(updateLocation(position))
-        
       },
       (error) => {
         console.log(error);
@@ -134,9 +88,8 @@ class App extends Component {
 
   
   async componentDidMount(){
-   this.gettoken()
-   this.getlocation()  
-   this.backgroundlocation() 
+   await this.gettoken()
+   await this.getlocation()   
   }
 
   
