@@ -63,9 +63,8 @@ import * as actions from '../../redux/actions';
     navigation.goBack();
   };
 
-  navigateTo = screen => () => {
-    const {navigation} = this.props;
-    navigation.navigate(screen);
+  navigateTo =  (item) => {
+    this.props.navigation.navigate('Product',{'product':item})
   };
 
   keyExtractor = item => item.id.toString();
@@ -80,7 +79,7 @@ import * as actions from '../../redux/actions';
       orderStatus={item.status}
       orderFrom={item.from}
       orderTo={item.to}
-      onPress={this.navigateTo('Product')}
+      onPress={()=>this.navigateTo(item)}
     />
   );
 

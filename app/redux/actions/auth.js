@@ -19,8 +19,13 @@ import {
    EMAIL_CHANGED,
    OLD_PASSWORD_CHANGED,
    NEW_PASSWORD_CHANGED,
-   CONFIRM_PASSWORD_CHANGED
-
+   CONFIRM_PASSWORD_CHANGED,
+   GET_TODAY_EARNINGS,
+   GET_EARNINGS,
+   AUTH_SENDING_FAILED,
+   OLD_PASSWORD,
+    NEW_PASSWORD,
+    CONFIRM_PASSWORD,
 } from '../actions/types';
 import axios from "axios"
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -202,6 +207,8 @@ export const setdate = (selectedDate,hdate,date,driver) =>{
                 dispatch({type:SET_DATE,payload:{selectedDate,hdate,orders,percentage}})
              })
              .catch(function (error) {
+                alert('Failed to send request check your network.')
+                dispatch({type:AUTH_SENDING_FAILED})
                  console.log(error.response.message)
                  
              })
@@ -251,6 +258,77 @@ export const confirmpwdchanged = (text) =>{
     return(dispatch)=>{
         dispatch({type:CONFIRM_PASSWORD_CHANGED,payload:text})
     }
+}
+
+
+export const getearnings = (driver,date) =>{
+    return(dispatch)=>{
+        dispatch({type:REG_LOADER})
+        axios.post(ROOT_URL+"/driver/date/earnings", {
+           driver:driver,
+           date:date
+         })
+             .then( async(response)  => {
+                let earningstotal = response.data.earningstotal
+                let totaltrips = response.data.totaltrips
+                let orders = response.data.orders
+                console.log("earningstotal,totaltrips")
+                console.log(earningstotal,totaltrips)
+                dispatch({type:GET_EARNINGS,payload:{earningstotal,totaltrips,orders}})
+             })
+             .catch(function (error) {
+                console.log("error.response")
+                console.log(error.response)
+                alert('Failed to send request check your network.')
+                dispatch({type:AUTH_SENDING_FAILED})
+                 console.log(error) 
+             })
+    }
+}
+
+
+
+export const oldpassword = (text) =>{
+    return(dispatch)=>{
+      dispatch({type:OLD_PASSWORD,payload:text})  
+    }
+}
+
+export const newpassword = (text) =>{
+    return(dispatch)=>{
+      dispatch({type:NEW_PASSWORD,payload:text})  
+    }
+}
+export const confirmpassword = (text) =>{
+    return(dispatch)=>{
+      dispatch({type:CONFIRM_PASSWORD,payload:text})  
+    }
+}
+
+
+export const sendpasswordchange = (newpwd,oldpwd,confirmpwd,id) =>{
+
+    return(dispatch)=>{
+        dispatch({type:REG_LOADER})
+        axios.post(ROOT_URL+"/rider/change/pwd", {
+          password:newpwd,
+          oldpassword:oldpwd,
+          id:id
+         })
+             .then( async(response)  => {
+               
+                let message = response.data.message
+                console.log(response.data)
+                alert(message)
+            dispatch({type:PASSWORD_EDITED})
+             })
+             .catch(function (error) {
+             console.log(error.response) 
+             alert(error.response.data.message)
+             dispatch({type:AUTH_SENDING_FAILED})
+             })
+        
+            }
 }
 
 

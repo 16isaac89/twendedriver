@@ -62,7 +62,7 @@ render(){
         </DrawerContentScrollView>
         <View style={{flexDirection:'row',justifyContent:'center'}}>
         <Text style={styles.textStyle}>
-          Twende Customer v0.0.1
+          Twende Rider v0.0.1
         </Text>
         <TouchableOpacity onPress={()=> this.props.logout()} style={{backgroundColor:'white',borderRadius:30}}>
 <Icon

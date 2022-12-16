@@ -31,10 +31,12 @@ import {
     OPEN_UPCOUNTRY_MODAL,
     SET_SCANNED,
     SENDING_ORDER,
-    SEND_STATUS
+    SEND_STATUS,
+    ORDER_CANCELLED,
+    CLOSE_ORDER_DETAILSMODAL
  } from '../actions/types';
  import axios from 'axios'
- import {commonurl} from '../../utils/utilities'
+ import {commonurl,apikey} from '../../utils/utilities'
  import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import moment from 'moment-timezone'
@@ -45,6 +47,10 @@ import Echo from 'laravel-echo';
 import Sound from 'react-native-sound'
 import RootNavigation from '../../navigation/RootNavigation'
 import * as RNLocalize from "react-native-localize";
+import Geocoder from 'react-native-geocoding';
+
+Geocoder.init(apikey);
+
 Sound.setCategory('Playback');
 
 
@@ -219,11 +225,6 @@ export const stopSound = async(sound)=> {
             await AsyncStorage.setItem('activeorder', JSON.stringify(item))
             dispatch({type:SET_ACTIVE_ORDER,payload:item})
             RootNavigation.navigate('Accepted')
-            //navigation.navigate("Accepted");
-            // }else{
-            //    await AsyncStorage.removeItem('activeorder')
-            //    dispatch({type:MODAL_OFF})
-            // }
           })
           .catch(function async(error) {
             AsyncStorage.removeItem('activeorder')
@@ -234,19 +235,34 @@ export const stopSound = async(sound)=> {
       
     }
  }
- export const checkActiveOrder = (item) =>{
+ export const checkActiveOrder = (navigation,active) =>{
     return async(dispatch)=>{
-        let active = await AsyncStorage.getItem('activeorder');
-       let item = JSON.parse(active)
-        dispatch({type:CHECK_ACTIVE_ORDER,payload:item})
+      dispatch({type:OPEN_LOADER})
+      let id = active.id
+      axios.post(ROOT_URL+"/get/active/order", {
+         id:id,
+      })
+          .then( async(response)  => {
+             let order = response.data.order
+             dispatch({type:CHECK_ACTIVE_ORDER,payload:order})
+             navigation.navigate('Accepted') 
+          })
+          .catch(function (error) {
+             dispatch({type:SEND_FAILED})
+              console.log(error.response)
+          })
+      //   let active = await AsyncStorage.getItem('activeorder');
+      //  let item = JSON.parse(active)
+      //  if(item){
+
+      //  }
+        
     }
  }
 
  export const sendOtp=(id,otp)=>{
     return async(dispatch)=>{
-
-
-      
+      dispatch({type:OPEN_LOADER})
       if (Platform.OS === 'android') {
          PermissionsAndroid.requestMultiple(
            [
@@ -276,9 +292,10 @@ export const stopSound = async(sound)=> {
                                 let order = response.data.order
                                 let status = response.data.order.status
                                 await AsyncStorage.setItem('activeorder', JSON.stringify(order))
-                                 dispatch({type:OTP_SENT,payload:status})
+                                 dispatch({type:OTP_SENT,payload:order})
                             }else{
                                 alert('Wrong otp please try again')
+                                dispatch({type:SEND_FAILED})
                             }
                            
                          })
@@ -358,12 +375,13 @@ export const stopSound = async(sound)=> {
          })
              .then( async(response)  => {
                     let status = response.data.status
+                    let order = response.data.order
                     console.log(status)
                    if(status === 1){
-                    dispatch({type:TXN_CHECK_PASSED,payload:1})
-                    alert('Passed')
+                    dispatch({type:TXN_CHECK_PASSED,payload:{status,order}})
+                  //   alert('Passed')
                    }else{
-                    alert('Failed')
+                    alert('Wrong confirmation code')
                     dispatch({type:SEND_FAILED})
                    }
              })
@@ -396,6 +414,7 @@ export const stopSound = async(sound)=> {
 
  export const cancelOrder =(id,driver)=>{
     return async(dispatch)=>{
+      dispatch({type:SENDING_ORDER})
         axios.post(ROOT_URL+"/order/cancel", {
             id:id,
             driver:driver
@@ -403,7 +422,7 @@ export const stopSound = async(sound)=> {
              .then( async(response)  => {
                 let order = response.data.order
                 await AsyncStorage.removeItem('activeorder')
-                 dispatch({type:OTP_SENT,payload:order})
+                 dispatch({type:ORDER_CANCELLED})
              })
              .catch(function (error) {
                 dispatch({type:SEND_FAILED})
@@ -414,52 +433,118 @@ export const stopSound = async(sound)=> {
 
 
 
- export const orderCompleted =(id,driver,navigation)=>{
+ export const orderCompleted =(id,driver,navigation,txn,location,ordertype)=>{
     return async(dispatch)=>{
-      // dispatch({type:SENDING_ORDER})
-      //   let address = ""
-     
-      //   const  {timezone}  = await Localization.getLocalizationAsync();
-      //  let { status } = await Location.requestForegroundPermissionsAsync();
-      //    if (status !== 'granted') {
-      //      setErrorMsg('Permission to access location was denied');
-      //      return;
-      //    }
-      //    let location = await Location.getCurrentPositionAsync({});
-      //     let time = await moment().tz(timezone).format('YYYY-MM-DD HH:mm:ss');
-      //     const { latitude, longitude } = location.coords ;
-      //  let response = await Location.reverseGeocodeAsync({
-      //    latitude,
-      //    longitude
-      //  });
-      //  for (let item of response) {
-      //     address = `${item.name}, ${item.street}, ${item.city}`;
-      //  }
-      //   axios.post(ROOT_URL+"/order/complete", {
-      //       id:id,
-      //       address:address,
-      //       endlat:latitude,
-      //       endlongitude:longitude,
-      //       time:time,
-      //       driver:driver
+      dispatch({type:SENDING_ORDER})
+      await Geolocation.getCurrentPosition((position)=>{
+         let lat = position.coords.latitude
+         let long = position.coords.longitude
+         var now	= moment();
+         let time = now.format('YYYY-MM-DD HH:mm:ss');
+         Geocoder.from(lat, long)
+		.then(json => {
+        		var address = json.results[0].formatted_address;
+                        axios.post(ROOT_URL+"/order/complete", {
+                  id:id,
+                  address:address,
+                  endlat:lat,
+                  endlongitude:long,
+                  time:time,
+                  driver:driver,
+                  txn:txn,
+                  ordertype:ordertype
+               })
+                   .then( async(response)  => {
+                     let status = response.data.status
+                    
+                          let order = response.data.order
+                          console.log(status)
+                         if(status === 1){
+      
+                           let orders = response.data.orders
+                     let cancelled = response.data.cancelled
+                     let completed = response.data.completed
+                      //dispatch({type:GET_ORDERS,payload:{orders,cancelled,completed}})
+                      let orderstatus = response.data.order.status
+                      let income = response.data.income
+                      console.log(completed)
+                      await AsyncStorage.setItem('activeorder',JSON.stringify({}));
+                      alert('Order has been completed')
+                       dispatch({type:ORDER_COMPLETED,payload:{orderstatus,income,orders,cancelled,completed}})
+                       if(location === 'dropoff'){
+                        navigation.navigate('Town')
+                       }else{
+                       navigation.navigate('Rating',order={order})
+                       }
+                          dispatch({type:TXN_CHECK_PASSED,payload:{status,order}})
+                          alert('Passed')
+                         }else{
+                          alert('Failed')
+                          dispatch({type:SEND_FAILED})
+                         }               
+                   })
+                   .catch(function (error) {
+                      dispatch({type:SEND_FAILED})
+                       console.log(error.response)
+                   })
+			console.log(address);
+		})
+		.catch(error => console.warn(error));
+      
+      }) 
+      //   await Geolocation.getCurrentPosition((position)=>{
+      //    let lat = position.coords.latitude
+      //    let long = position.coords.longitude
+      //    var now	= moment();
+      //       let time = now.format('YYYY-MM-DD HH:mm:ss');
+           
+      //    Geocoder.from(lat, long)
+      //    .then(json => {
+      //            var address = json.results[0].address_components[0];
+      //            axios.post(ROOT_URL+"/order/complete", {
+      //             id:id,
+      //             address:address,
+      //             endlat:lat,
+      //             endlongitude:long,
+      //             time:time,
+      //             driver:driver,
+      //             txn:txn
+      //          })
+      //              .then( async(response)  => {
+      //                let status = response.data.status
+                    
+      //                     let order = response.data.order
+      //                     console.log(status)
+      //                    if(status === 1){
+      
+      //                      let orders = response.data.orders
+      //                let cancelled = response.data.cancelled
+      //                let completed = response.data.completed
+      //                 //dispatch({type:GET_ORDERS,payload:{orders,cancelled,completed}})
+      //                 let orderstatus = response.data.order.status
+      //                 let income = response.data.income
+      //                 console.log(completed)
+      //                 await AsyncStorage.setItem('activeorder',JSON.stringify({}));
+      //                 alert('Order has been completed')
+      //                  dispatch({type:ORDER_COMPLETED,payload:{orderstatus,income,orders,cancelled,completed}})
+      //                  navigation.navigate('Rating',order={order})
+      //                     dispatch({type:TXN_CHECK_PASSED,payload:{status,order}})
+      //                     alert('Passed')
+      //                    }else{
+      //                     alert('Failed')
+      //                     dispatch({type:SEND_FAILED})
+      //                    }               
+      //              })
+      //              .catch(function (error) {
+      //                 dispatch({type:SEND_FAILED})
+      //                  console.log(error.response)
+      //              })
+            
       //    })
-      //        .then( async(response)  => {
-      //          let orders = response.data.orders
-      //          let cancelled = response.data.cancelled
-      //          let completed = response.data.completed
-      //           //dispatch({type:GET_ORDERS,payload:{orders,cancelled,completed}})
-      //           let status = response.data.order.status
-      //           let income = response.data.income
-      //           console.log(completed)
-      //           await AsyncStorage.removeItem('activeorder');
-      //           alert('Order has been completed')
-      //            dispatch({type:ORDER_COMPLETED,payload:{status,income,orders,cancelled,completed}})
-      //            navigation.navigate('TopBar')
-      //        })
-      //        .catch(function (error) {
-      //           dispatch({type:SEND_FAILED})
-      //            console.log(error.response)
-      //        })
+      //    .catch(error => console.warn(error));
+      //   }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 })
+     
+       
     }
  }
 
@@ -517,9 +602,45 @@ return(dispatch)=>{
       dispatch({type: CLOSE_UPCOUNTRY_MODAL})
    }
 }
-export const setscanned = (order) =>{
+export const setscanned = (order,id) =>{
+   return async(dispatch)=>{
+      dispatch({type:SENDING_ORDER})
+      await Geolocation.getCurrentPosition((position)=>{
+         let lat = position.coords.latitude
+         let long = position.coords.longitude
+         var now	= moment();
+         Geocoder.from(lat,long)
+		.then(json => {
+        		var address = json.results[0].formatted_address;
+                        axios.post(ROOT_URL+"/driver/scan", {
+                  id:id,
+                  location:address,
+                  lat:lat,
+                  long:long,
+                  order:order
+               })
+                   .then( async(response)  => {
+                     let status = response.data.message
+                     alert(status)
+                     let scanned = response.data.order
+                     dispatch({type: SET_SCANNED,payload:scanned})              
+                   })
+                   .catch(function (error) {
+                      dispatch({type:SEND_FAILED})
+                       console.log(error.response)
+                   })
+			console.log(address);
+		})
+		.catch(error => console.warn(error));
+      
+      }) 
+      
+   }
+}
+
+export const closeorderdetails = () =>{
    return(dispatch)=>{
-      dispatch({type: SET_SCANNED,payload:order})
+      dispatch({type:CLOSE_ORDER_DETAILSMODAL})
    }
 }
  

@@ -6,9 +6,10 @@ import store from "./app/redux/store"
 import {checklogin,orderNotification,openModal,updateLocation} from "./app/redux/actions"
 import ReactNativeForegroundService from "@supersami/rn-foreground-service";
 
-import Geolocation from 'react-native-geolocation-service';
 import notifee,{EventType} from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
+import Geolocation from 'react-native-geolocation-service';
+
 
 store.dispatch(checklogin())
 
@@ -63,6 +64,7 @@ notifee.onForegroundEvent(({ type, detail }) => {
 
 ReactNativeForegroundService.add_task(
   () => {
+    
     if (Platform.OS === 'android') {
       PermissionsAndroid.requestMultiple(
         [
@@ -74,19 +76,26 @@ ReactNativeForegroundService.add_task(
           if (result['android.permission.ACCESS_COARSE_LOCATION']
           && result['android.permission.ACCESS_BACKGROUND_LOCATION']
           && result['android.permission.ACCESS_FINE_LOCATION'] === 'granted') {
-            Geolocation.watchPosition(
-              (position) => {
-                
-                store.dispatch(updateLocation(position))
-                console.log(position.coords)
-              },
-              (error) => {
-                console.log("error");
-                console.log(error);
-              },
-              { enableHighAccuracy: true, distanceFilter: 100,maximumAge: 0, fastestInterval: 2000,showsBackgroundLocationIndicator:true }
-            // this.getlocation()
-            )
+            console.log('sdfsdfsdf')
+    Geolocation.getCurrentPosition(
+      (position) => {
+        
+        //Will give you the location on location change
+        console.log(position);
+        store.dispatch(updateLocation(position))
+        const currentLongitude = JSON.stringify(position.coords.longitude);
+        //getting the Longitude from the location json
+        const currentLatitude = JSON.stringify(position.coords.latitude);
+        //getting the Latitude from the location json
+        console.log(currentLongitude);
+        
+        //Setting state Latitude to re re-render the Longitude Text
+      },
+      (error) => {
+        console.log(error.message);
+      },
+      { enableHighAccuracy: true, distanceFilter: 100, fastestInterval: 2000 }
+    );   
           } else if (result['android.permission.ACCESS_COARSE_LOCATION']
           || result['android.permission.ACCESS_FINE_LOCATION']
           || result['android.permission.ACCESS_BACKGROUND_LOCATION'] === 'never_ask_again') {
@@ -96,15 +105,15 @@ ReactNativeForegroundService.add_task(
     }
   },
   {
-    delay: 1,
+    delay: 90000,
     onLoop: true,
-    taskId: 'taskid12',
+    taskId: '2300',
     onError: (e) => console.log('Error logging:', e),
   },
 );
 
 ReactNativeForegroundService.start({
-  id: 144,
+  id: 2300,
   title: "Background mode activated",
   message: "Twende is currently running in background mode.",
 });

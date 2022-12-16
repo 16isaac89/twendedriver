@@ -66,7 +66,7 @@ import Modal from '../../components/modals/Modal'
   };
 
   navigateTo =  (item) => {
-    this.props.navigation.navigate('Product',{'item':item})
+    this.props.navigation.navigate('Product',{'product':item})
   };
 
   keyExtractor = item => item.id.toString();

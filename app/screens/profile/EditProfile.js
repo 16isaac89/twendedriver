@@ -169,7 +169,7 @@ class EditProfile extends Component {
         <KeyboardAwareScrollView enableOnAndroid>
           <View style={styles.avatarSection}>
             <Avatar
-              imageUri={require('../../assets/img/profile.jpg')}
+              imageUri={this.props.user.profile || 'https://twende.io/site/assets/img/logos/black-logo.png'}
               rounded
               size={AVATAR_SIZE}
             />
@@ -195,7 +195,7 @@ class EditProfile extends Component {
               onRef={r => {
                 this.name = r;
               }}
-              value={name}
+              value={this.props.user.fullname}
               onChangeText={this.nameChange}
               onFocus={this.nameFocus}
               inputFocused={nameFocused}
@@ -211,7 +211,7 @@ class EditProfile extends Component {
               onRef={r => {
                 this.email = r;
               }}
-              value={email}
+              value={this.props.user.email}
               onChangeText={this.emailChange}
               onFocus={this.emailFocus}
               inputFocused={emailFocused}
@@ -228,7 +228,7 @@ class EditProfile extends Component {
               onRef={r => {
                 this.phone = r;
               }}
-              value={phone}
+              value={this.props.user.phone_1}
               keyboardType="phone-pad"
               onChangeText={this.phoneChange}
               onFocus={this.phoneFocus}

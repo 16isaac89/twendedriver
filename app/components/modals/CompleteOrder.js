@@ -24,20 +24,25 @@ const INPUT_FOCUSED_BORDER_COLOR = Colors.secondaryColor;
 class CompleteOrder extends Component {
 
   completeOrder = () =>{
-    if(this.props.txncheck === "0"){
-alert("Please first verify the order with order txn id that was sent to the recipient through sms. Ask the recipient to provide it to you.")
+    if(this.props.orderid === ""){
+      alert("Order TXN ID is required.")
     }else{
-    let id =  this.props.active.id
-    let driver = this.props.user.id
-    let navigation = this.props.navigation
-    this.props.orderCompleted(id,driver,navigation)
+    let id =  this.props.orderactive;
+    let driver = this.props.user.id;
+    let navigation = this.props.navigation;
+    let location = this.props.route
+    let txn = this.props.orderid;
+    let ordertype = this.props.ordertype
+    this.props.orderCompleted(id,driver,navigation,txn,location,ordertype);
     }
   }
 
   sendTXN = () =>{
     let id = this.props.active.id
     let txn = this.props.orderid
-    this.props.checkTxn(id,txn)
+    let driver = this.props.user.id
+    let navigation = this.props.navigation
+    this.props.checkTxn(id,txn,navigation)
 } 
   constructor(props) {
     super(props);
@@ -141,7 +146,7 @@ alert("Please first verify the order with order txn id that was sent to the reci
                 onChangeText={this.emailChange}
                 onFocus={this.emailFocus}
                 
-              
+              keyboardType={"numeric"}
                 returnKeyType="next"
                 blurOnSubmit={false}
                 placeholder="Order TXN ID"
@@ -153,9 +158,9 @@ alert("Please first verify the order with order txn id that was sent to the reci
                 value={this.props.orderid}
               />
 
-            <View style={styles.buttonContainer}>
+            {/* <View style={styles.buttonContainer}>
                 {this.showTXNButton()}
-                    </View>
+                    </View> */}
 
               <View style={styles.buttonContainer}>
 

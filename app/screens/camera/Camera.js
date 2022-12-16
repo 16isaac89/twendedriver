@@ -5,25 +5,41 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  Linking
+  Linking,
+  View
 } from 'react-native';
 
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
 import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
+import ActivityIndicatorModal from '../../components/modals/ActivityIndicatorModal';
+import Colors from '../../theme/colors';
+import OrderDetails from '../../components/modals/OrderDetails';
 
 class Camera extends Component {
+  componentDidMount(){
+    console.log(this.props.orderdetails)
+}
 
   onSuccess = e => {
     let order = e.data
-      this.props.setscanned(order)
+    let id = this.props.user.id
+    this.props.setscanned(order,id)
     //console.log(e.data)
   };
 
   render() {
     return (
       <View>
+        <ActivityIndicatorModal
+              statusBarColor={Colors.primaryColor }
+              message="Getting order details . . ."
+              onRequestClose={this.closeModal}
+              title="Please wait"
+              visible={this.props.sendingorder}
+            />
+            <OrderDetails />
       <QRCodeScanner
         onRead={this.onSuccess}
         flashMode={RNCamera.Constants.FlashMode.auto}
@@ -50,6 +66,8 @@ class Camera extends Component {
 function mapStateToProps( state ) {
   return { 
    user:state.auth.user,
+   sendingorder:state.order.sendingorder,
+   orderdetails:state.order.scanned,
   };
 }
 export default connect(mapStateToProps, actions)(Camera);

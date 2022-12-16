@@ -1,4 +1,15 @@
 {
   "name": "driverapp",
-  "displayName": "driverapp"
+  "displayName": "driverapp",
+  "android": {
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/adaptive-icon.png",
+      "backgroundColor": "#FFFFFF"
+    },
+    "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION", "CAMERA", "FOREGROUND_SERVICE"],
+    "versionCode": 1,
+    "config": {
+      "googleMaps": { "apiKey": "AIzaSyDSGXiLg9kRk_93B-s_2VFkrnqHfULeZtI" }
+    }
+  }
 }

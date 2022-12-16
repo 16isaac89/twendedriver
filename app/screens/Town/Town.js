@@ -15,9 +15,27 @@ import * as actions from '../../redux/actions';
 import ActivityIndicatorModal from '../../components/modals/ActivityIndicatorModal';
 import Geolocation from 'react-native-geolocation-service';
 import haversine from 'haversine'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 class Town extends Component {
 
+async componentDidMount(){
+  let x = await AsyncStorage.getItem('activeorder')
+  let active = JSON.parse(x)
+  if(active){
+  let navigation = this.props.navigation
+  await this.props.checkActiveOrder(navigation,active)
+  }
 
+  let  today 		= new Date();
+	let  dd 		= String(today.getDate()).padStart(2, '0');
+	let  mm 		= String(today.getMonth() + 1).padStart(2, '0'); //janvier = 0
+	let  yyyy 		= today.getFullYear();
+	let date =  `${yyyy}-${mm}-${dd}`;
+  let driver = this.props.user.id
+  this.props.getearnings(driver,date)
+}
  
 
 
@@ -74,18 +92,34 @@ class Town extends Component {
   render() {
     return (
         <View style={styles.container}>
-        
+        <ActivityIndicatorModal
+              statusBarColor={Colors.primaryColor }
+              message="Getting today's earnings . . ."
+              onRequestClose={this.closeModal}
+              title="Please wait"
+              visible={this.props.regloader}
+            />
+             <ActivityIndicatorModal
+              statusBarColor={Colors.primaryColor }
+              message="Getting active order . . ."
+              onRequestClose={this.closeModal}
+              title="Please wait"
+              visible={this.props.loader}
+            />
           <Modal />
         <MapView style={styles.map}
         provider={PROVIDER_GOOGLE}
                 showsUserLocation={true}
-               // followsUserLocation={true}
+               followsUserLocation={true}
+               showsMyLocationButton={true}
+               zoomEnabled
+               textStyle={{ color: 'green' }}
                 region={this.getMapRegion()}
          initialRegion={{
           latitude: this.props.latitude,
           longitude: this.props.longitude,
-          latitudeDelta: 0.04864195044303443,
-          longitudeDelta: 0.040142817690068,
+          latitudeDelta: 0.0009,
+          longitudeDelta: 0.0009,
           }}
         >
            {/* <Marker
@@ -123,29 +157,14 @@ class Town extends Component {
             alignSelf: 'flex-start' //for align to right
         }}
     >
-<TouchableOpacity onPress={()=> this.starttrack()} style={styles.menubtn}>
-<MaterialIcons
-    name="gps-fixed"
-    color="green"
-    size={40}
-  />
+<TouchableOpacity onPress={()=> this.props.navigation.navigate('Camera')} style={styles.menuscanner}>
+<FontAwesome name="qrcode" size={60} color="green" />
 </TouchableOpacity> 
 </View>
 
 
 
-<View
-        style={{
-            position: 'absolute',//use absolute position to show button on top of the map
-            top: '1%', //for center align
-            right:'4%',
-            alignSelf: 'flex-start' //for align to right
-        }}
-    >
-<TouchableOpacity onPress={()=> this.props.navigation.navigate('Camera')} style={styles.menuscanner}>
-<FontAwesome name="qrcode" size={60} color="green" />
-</TouchableOpacity>
-</View>
+
 
 <View
         style={{
@@ -183,7 +202,7 @@ class Town extends Component {
         flex: 1,
         }}>
 <Text style={styles.textStyle2}>Completed Trips</Text>
-<Text style={styles.textStyle3}>0</Text>
+<Text style={styles.textStyle3}>{this.props.totaltrips}</Text>
       </View>
 
      
@@ -196,7 +215,7 @@ class Town extends Component {
         flex: 1,
         }}>
 <Text style={styles.textStyle2}>Today's Earnings</Text>
-<Text style={styles.textStyle3}>UGX: {this.props.earning}</Text>
+<Text style={styles.textStyle3}>UGX: {this.props.earningstotal}</Text>
       </View>
  
 </View>
@@ -217,7 +236,12 @@ function mapStateToProps( state ) {
    active:state.order.active,
    routeCoordinates: state.auth.routeCoordinates,
   distanceTravelled: state.auth.distanceTravelled,
-  prevLatLng:state.auth.valueprevLatLng
+  prevLatLng:state.auth.valueprevLatLng,
+  user:state.auth.user,
+  loader:state.order.loader,
+  regloader:state.auth.regloader,
+  earningstotal:state.auth.earningstotal || 0,
+  totaltrips:state.auth.totaltrips || 0,
   };
 }
 

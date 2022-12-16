@@ -25,7 +25,7 @@ class OrderModal extends Component {
     
   }
   denyOrder = async()=>{
-    RootNavigation.navigate('Accepted')
+    // RootNavigation.navigate('Accepted')
     this.stopSound()
     this.props.modalTimeOut()
     // let order = this.props.order

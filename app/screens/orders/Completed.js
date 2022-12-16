@@ -62,6 +62,7 @@ import order from '../../redux/reducers/order';
   };
 
   navigateTo = (item) => {
+    //console.log(item)
    this.props.navigation.navigate('Product',{'product':item})
   };
 

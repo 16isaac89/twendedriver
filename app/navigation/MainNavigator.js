@@ -18,7 +18,7 @@ import HeaderIconButton from '../components/navigation/HeaderIconButton';
 
 // import Welcome screen
 import Camera from '../screens/camera/Camera';
-
+import Rating from '../screens/orders/Rating'
 // import SignUp screen
 import SignUp from '../screens/signup/SignUp';
 
@@ -49,7 +49,7 @@ import Checkout from '../screens/checkout/Checkout';
 
 // import EditProfile screen
 import EditProfile from '../screens/profile/EditProfile';
-
+import EditPassword from '../screens/profile/EditPassword';
 
 
 // import AddAddress screen
@@ -310,6 +310,21 @@ class MainNavigatorA extends Component {
           component={Ordercomplete}
           options={{
             title: 'Take Delivery Picture',
+          }}
+        />
+
+<Stack.Screen
+          name="Rating"
+          component={Rating}
+          options={{
+            title: 'Rate you experience.',
+          }}
+        />
+        <Stack.Screen
+          name="EditPassword"
+          component={EditPassword}
+          options={{
+            title: 'Edit your password.',
           }}
         />
         </>

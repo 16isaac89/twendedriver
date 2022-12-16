@@ -17,6 +17,8 @@ import io.invertase.notifee.NotifeePackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 // @react-native-community/datetimepicker
 import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
+// @react-native-community/geolocation
+import com.reactnativecommunity.geolocation.GeolocationPackage;
 // @react-native-community/masked-view
 import org.reactnative.maskedview.RNCMaskedViewPackage;
 // @react-native-community/netinfo
@@ -103,6 +105,7 @@ public class PackageList {
       new NotifeePackage(),
       new AsyncStoragePackage(),
       new RNDateTimePickerPackage(),
+      new GeolocationPackage(),
       new RNCMaskedViewPackage(),
       new NetInfoPackage(),
       new ReactToolbarPackage(),

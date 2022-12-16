@@ -15,7 +15,13 @@ import {
    FOLLOW_DRIVER,
    PHONE_NUMBER_CHANGED,
    FULL_NAME_CHANGED,
-   EMAIL_CHANGED
+   EMAIL_CHANGED,
+   GET_EARNINGS,
+   AUTH_SENDING_FAILED,
+   OLD_PASSWORD,
+   NEW_PASSWORD,
+   CONFIRM_PASSWORD,
+   PASSWORD_EDITED,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -45,7 +51,13 @@ const INITIAL_STATE = {
 
   routeCoordinates: [],
   distanceTravelled: 0,
-  valueprevLatLng: {}
+  valueprevLatLng: {},
+  earnings:'',
+  earningstotal:'',
+  totaltrips:'',
+  confirmpwd:'',
+   newpwd:'',
+   oldpassword:''
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -95,6 +107,18 @@ export default function(state = INITIAL_STATE, action) {
       return{...state,fullname:action.payload}
     case EMAIL_CHANGED:
       return{...state,email:action.payload}
+    case GET_EARNINGS:
+      return{...state,earningstotal:action.payload.earningstotal,totaltrips:action.payload.totaltrips,regloader:false}
+    case AUTH_SENDING_FAILED:
+      return{...state,regloader:false}
+      case OLD_PASSWORD:
+        return{...state,oldpassword:action.payload}
+      case NEW_PASSWORD:
+        return{...state,newpwd:action.payload}
+      case CONFIRM_PASSWORD:
+        return{...state,confirmpwd:action.payload}
+      case PASSWORD_EDITED:
+        return{...state,confirmpwd:'',newpwd:'',oldpassword:'',regloader:false}
     default:
       return state;
   }

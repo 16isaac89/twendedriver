@@ -267,6 +267,22 @@ class Settings extends Component {
           </TouchableItem>
           <Divider type="inset" marginLeft={DIVIDER_MARGIN_LEFT} /> */}
 
+<TouchableItem onPress={()=>this.props.navigation.navigate('EditPassword')}>
+            <View style={[styles.row, styles.setting]}>
+              <View style={styles.leftSide}>
+                <View style={styles.iconContainer}>
+                  <Icon
+                    name={LOGOUT_ICON}
+                    size={24}
+                    color={Colors.primaryColor}
+                  />
+                </View>
+                <Subtitle1 style={[styles.logout, styles.mediumText]}>
+                  Edit Password
+                </Subtitle1>
+              </View>
+            </View>
+          </TouchableItem>
 
 
           <TouchableItem onPress={()=>this.props.logout()}>

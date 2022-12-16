@@ -16,7 +16,8 @@ import {
   StyleSheet,
   Text,
   View,
-  ActivityIndicator
+  ActivityIndicator,
+  TouchableOpacity
 } from 'react-native';
 
 // import utils
@@ -26,8 +27,7 @@ import getImgSource from '../../utils/getImgSource.js';
 import Button from '../../components/buttons/Button';
 import {Caption, Heading5, SmallText} from '../../components/text/CustomText';
 import Icon from '../../components/icon/Icon';
-import TouchableItem from '../../components/TouchableItem';
-import { Ionicons } from 'react-native-vector-icons'; 
+import TouchableItem from '../../components/TouchableItem'; 
 // import colors
 import Colors from '../../theme/colors';
 
@@ -47,23 +47,26 @@ const CLOSE_ICON = IOS ? 'ios-close' : 'md-close';
 const RATING_ICON = IOS ? 'ios-star' : 'md-star';
 import styles from './styles'
 import Divider from '../../components/divider/Divider';
-import { MaterialIcons,Entypo,MaterialCommunityIcons,FontAwesome5 } from 'react-native-vector-icons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import Entypo from 'react-native-vector-icons/Entypo'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import CompleteOrder from '../../components/modals/CompleteOrder.js';
 // Product
 class Product extends Component {
   completetownorder = () =>{
-    let item = this.props.route.params.item 
-    this.props.setActiveTown(item)
-   // this.props.opencompletemodal()
+    let item = this.props.route.params.product 
+    //this.props.setActiveTown(item)
+    this.props.opencompletemodal()
   }
   componentDidMount(){
-    console.log("this.props.route.params.item")
-    console.log(this.props.route.params.item)
+    console.log("this.props.route.params.product")
+    console.log(this.props.route.params.product)
   }
 //   opendest = () =>{
-//     let dest = this.props.route.params.item.to
+//     let dest = this.props.route.params.product.to
 //     var url = "https://www.google.com/maps/dir/?api=1&travelmode=driving&dir_action=navigate&destination="+dest;
 // Linking.canOpenURL(url).then(supported => {
 //     if (!supported) {
@@ -75,7 +78,7 @@ class Product extends Component {
 //   }
 
 //   openorigin = () =>{
-//     let origin = this.props.route.params.item.from
+//     let origin = this.props.route.params.product.from
 //     var url = "https://www.google.com/maps/dir/?api=1&travelmode=driving&dir_action=navigate&destination="+origin;
 // Linking.canOpenURL(url).then(supported => {
 //     if (!supported) {
@@ -87,7 +90,7 @@ class Product extends Component {
 //   }
  
   completeorder = () =>{
-    if(this.props.route.params.item.status === 'completed'){
+    if(this.props.route.params.product.status === 'completed'){
           return  <Button
           title={`Complete`}
           titleColor={Colors.onPrimaryColor}
@@ -96,9 +99,9 @@ class Product extends Component {
 
           rounded
           />
-    }else if(this.props.route.params.item.status === "cancelled"){
+    }else if(this.props.route.params.product.status === "cancelled"){
       return  <Button
-      title={`Cancelled`}
+      title={`Canceled`}
       titleColor={Colors.onPrimaryColor}
       height={44}
       color={"red"}
@@ -107,12 +110,10 @@ class Product extends Component {
       />
     }else{
      
-        if(this.props.route.params.item.order_where === "upcountry"){
+        if(this.props.route.params.product.order_where === "upcountry"){
          return (
-        
-          
          <TouchableOpacity
-         onPress={()=> this.props.navigation.navigate('Camera')}
+         onPress={()=> this.props.navigation.navigate('Camera',)}
           style={styles.button}
           // title={`Scan`}
           // titleColor={Colors.onPrimaryColor}
@@ -140,7 +141,7 @@ class Product extends Component {
     }
   }
  callrecipient = () =>{
-  let phone = this.props.route.params.item.recipientnumber
+  let phone = this.props.route.params.product.recipientnumber
   Linking.openURL(`tel:${phone}`);
  }
   constructor(props) {
@@ -225,14 +226,14 @@ class Product extends Component {
   render() {
     const {product, favorite, extras} = this.state;
     const {price, description, quantity, total} = product;
-let order = this.props.route.params.item
+let order = this.props.route.params.product
     return (
       <Fragment>
         <StatusBar
           backgroundColor={Colors.statusBarColor}
           barStyle="light-content"
         />
-       <CompleteOrder navigation={this.props.navigation}/>
+       <CompleteOrder navigation={this.props.navigation} route={'dropoff'} orderactive={this.props.route.params.product.id} ordertype={'uppickdrop'}/>
         <SafeAreaView style={styles.topArea} />
         <View style={styles.screenContainer}>
           <ScrollView>
@@ -255,9 +256,11 @@ let order = this.props.route.params.item
                   styles.right,
                   favorite && styles.favorite,
                 ]}>
-                <Text style={styles.textStyle3}>Trip: #{order.id}</Text>
+                <Text style={styles.textStyle3}>Trip: #{this.props.route.params.product.id}</Text>
               </View>
             </View>
+
+
 
             <View style={styles.from}>
             <MaterialIcons name="location-history" size={24} color="black" />
@@ -301,6 +304,8 @@ let order = this.props.route.params.item
                     
               </View>
 
+
+              <View style={{flexDirection:'row'}}>
               <View style={styles.from}>
               <MaterialCommunityIcons name="map-marker-distance" size={24} color="black" />
                     <View style={styles.distance}>
@@ -324,6 +329,24 @@ let order = this.props.route.params.item
                     </View>
                     
               </View>
+              </View>
+
+
+<View style={{flexDirection:'row'}}>
+              <View style={styles.from}>
+              <Entypo name="phone" size={24} color="black" />
+                    <View style={styles.location}>
+                      <Text style={styles.textStyle}>Sender's Number</Text>
+                      <TouchableOpacity onPress={()=>this.callrecipient()}>
+                      <Text style={styles.textStyle3}>
+                        {order.originnumber}
+                        <Entypo name="phone" size={54} color="black" />
+                      </Text>
+                      </TouchableOpacity>
+                      <Divider type="full-bleed" color={Colors.primaryColor}/>
+                    </View>
+                    
+              </View>
 
               <View style={styles.from}>
               <Entypo name="phone" size={24} color="black" />
@@ -337,8 +360,10 @@ let order = this.props.route.params.item
                       </TouchableOpacity>
                       <Divider type="full-bleed" color={Colors.primaryColor}/>
                     </View>
-                    
               </View>
+              </View>
+
+              
            
           </ScrollView>
 

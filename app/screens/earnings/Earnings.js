@@ -39,11 +39,22 @@ import { connect } from 'react-redux';
 import * as actions from '../../redux/actions';
 	
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import ActivityIndicatorModal from '../../components/modals/ActivityIndicatorModal';
 
 
 class Earnings extends Component {
-  
+  async componentDidMount(){
+    let  today 		= new Date();
+	let  dd 		= String(today.getDate()).padStart(2, '0');
+	let  mm 		= String(today.getMonth() + 1).padStart(2, '0'); //janvier = 0
+	let  yyyy 		= today.getFullYear();
+	let date =  `${yyyy}-${mm}-${dd}`;
+  let driver = this.props.user.id
+  let selectedDate = today;
+  let hdate = selectedDate.toDateString()
+  this.props.setdate(selectedDate,hdate,date,driver)
+  //this.props.getearnings(driver,date)
+  }
 
   __getCompletedIcon = (item) => {
     if(item.completed == 1) {
@@ -78,9 +89,19 @@ class Earnings extends Component {
   render(){
   return (
  <View style={{flex:1,flexDirection:'column'}}>
+
+<ActivityIndicatorModal
+              statusBarColor={Colors.primaryColor }
+              message="Getting today's earnings . . ."
+              onRequestClose={this.closeModal}
+              title="Please wait"
+              visible={this.props.regloader}
+            />
+
+
    <View style={styles.header}>
               <View style={[styles.topButton, styles.left]}>
-                <TouchableItem onPress={()=>this.props.navigation.navigate('Town')} borderless>
+                <TouchableItem  borderless onPress={()=>this.props.navigation.navigate('Town')}>
                   <View style={styles.buttonIconContainer}>
                   <Ionicons name="arrow-back" size={24} color="black" />
                   </View>
@@ -129,7 +150,7 @@ class Earnings extends Component {
   }}
   renderItem={({item}) => {
   return (
-    <TouchableOpacity style={[styles.card, {borderColor:item.color}]} onPress={() => {this.navigateTo(item)}}>
+    <TouchableOpacity style={[styles.card, {borderColor:item.color}]}>
       <Image style={styles.image} source={{uri: this.__getCompletedIcon(item)}}/>
       <View style={styles.cardContent}>
       <Text style={styles.textStyle}>ID</Text>
@@ -165,7 +186,8 @@ function mapStateToProps( state ) {
   driverpercent:state.auth.driverpercent,
   total:state.auth.dateorders.reduce((accumulator, object) => {
     return accumulator + object.money*state.auth.driverpercent
-  }, 0)
+  }, 0),
+  regloader:state.auth.regloader
   };
 }
 

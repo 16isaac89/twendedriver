@@ -30,7 +30,9 @@ import {
     OPEN_UPCOUNTRY_MODAL,
     SET_SCANNED,
     SENDING_ORDER,
-    SEND_STATUS
+    SEND_STATUS,
+    ORDER_CANCELLED,
+    CLOSE_ORDER_DETAILSMODAL
  } from '../actions/types';
  
  const INITIAL_STATE = {
@@ -55,7 +57,12 @@ import {
  upcountry:'Select order status',
  upcountrymodal:false,
  scanned:'',
- sendingorder:false
+ sendingorder:false,
+ rateorder:'',
+ ratingcomment:'',
+ rating:'',
+ orderdetailsmodal:true,
+ otpstatus:false
  };
  
  export default function(state = INITIAL_STATE, action) {
@@ -83,7 +90,7 @@ import {
     case SET_TOWN_ACTIVE:
       return{...state,active:action.payload,order:'',orderstatus:action.payload.status,completeordermodal:true}
     case CHECK_ACTIVE_ORDER:
-      return{...state,active:action.payload}
+      return{...state,active:action.payload,orderstatus:action.payload.status,loader:false}
     case OTP_CHANGED:
       return{...state,otp:action.payload}
     case OPEN_OTP_MODAL:
@@ -93,7 +100,7 @@ import {
     case OPEN_LOADER:
       return{...state,loader:true}
     case OTP_SENT:
-      return{...state,loader:false,otp:'',startmodal:false,orderstatus:action.payload.status}
+      return{...state,loader:false,otp:'',startmodal:false,orderstatus:action.payload.status,active:action.payload,otpstatus:true}
     case SEND_STATUS:
       return{...state,loader:false,otp:'',startmodal:false,orderstatus:action.payload}
     case ORDER_ID_CHANGED:
@@ -105,9 +112,9 @@ import {
     case CLOSE_COMPLETE_ORDERMODAL:
       return{...state,completeordermodal:false}
     case ORDER_COMPLETED:
-      return{...state,orderstatus:action.payload.status,earning:action.payload.income,completedstatus:"1",sendingorder:false,completeordermodal:false,}
+      return{...state,orderstatus:"",earning:action.payload.income,completedstatus:"1",sendingorder:false,completeordermodal:false,}
     case TXN_CHECK_PASSED:
-      return{...state,txncheck:'1',loader:false,completeordermodal:false,sendingorder:false}
+      return{...state,txncheck:action.payload.status,loader:false,completeordermodal:false,sendingorder:false,rateorder:action.payload.order}
     case SEND_FAILED:
       return{...state,loader:false,modal:false,sendingorder:false}
     case CLEAR_STATE:
@@ -130,9 +137,13 @@ import {
     case CLOSE_UPCOUNTRY_MODAL:
       return{...state,upcountrymodal:false}
     case SET_SCANNED:
-      return{...state,scanned:action.payload,upcountrymodal:true}
+      return{...state,scanned:action.payload,loader:false,sendingorder:false,orderdetailsmodal:true}
     case SENDING_ORDER:
       return{...state, sendingorder:true}
+    case ORDER_CANCELLED:
+      return{...state,loader:false,orderstatus:''}
+    case CLOSE_ORDER_DETAILSMODAL:
+      return{...state,orderdetailsmodal:false}
      default:
        return state;
    }
